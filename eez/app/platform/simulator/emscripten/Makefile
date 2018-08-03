@@ -22,7 +22,8 @@ CXXFLAGS = -g \
 	-I../../../../mw/platform/simulator/linux/third_party \
 	-fPIC \
 	-s USE_SDL=2 -s USE_SDL_IMAGE=2 -s USE_SDL_TTF=2 -s SDL2_IMAGE_FORMATS='[png]' \
-	-s DEMANGLE_SUPPORT=1
+	-s DEMANGLE_SUPPORT=1 \
+	-s FORCE_FILESYSTEM=1
 
 CXXSOURCES = \
 	../../../../mw/*.cpp \
@@ -32,12 +33,12 @@ CXXSOURCES = \
 	../../../../mw/platform/simulator/*.cpp \
 	../../../../mw/platform/simulator/front_panel/*.cpp \
 	../../../../mw/platform/simulator/imgui/*.cpp \
-	../../../../mw/platform/simulator/emscripten/*.cpp \
 	../../../../app/*.cpp \
 	../../../../app/gui/*.cpp \
 	../../../../app/platform/simulator/*.cpp \
 	../../../../app/platform/simulator/ethernet/*.cpp \
 	../../../../app/platform/simulator/front_panel/*.cpp \
+	../../../../app/platform/simulator/emscripten/*.cpp \
 	../../../../app/scpi/*.cpp
 
 LINKERFLAGS = -lpthread --preload-file ../../simulator/images@images --preload-file ../../simulator/fonts@fonts

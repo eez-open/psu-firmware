@@ -16,20 +16,40 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "eez/mw/mw.h"
-#include "eez/mw/platform/simulator/main_loop.h"
+#include "eez/app/psu.h"
+#include "eez/mw/platform/simulator/ethernet.h"
 
-#include <emscripten.h>
+namespace eez {
+namespace platform {
+namespace ethernet {
 
-#include <stdlib.h>
-#include <stdio.h>
-
-static int cnt = 0;
-
-int eez_app_main_loop() {
-    emscripten_set_main_loop(eez_app_tick, 0, 1);
+bool bind(int port) {
+    return false;
 }
 
-void eez_app_main_loop_exit() {
-    printf("eez_app_main_loop_exit");
+bool client_available() {
+    return false;
 }
+
+bool connected() {
+    return false;
+}
+
+int available() {
+    return 0;
+}
+
+int read(char *buffer, int buffer_size) {
+    return 0;
+}
+
+int write(const char *buffer, int buffer_size) {
+    return 0;
+}
+
+void stop() {
+}
+
+}
+}
+} // namespace eez::platform::ethernet

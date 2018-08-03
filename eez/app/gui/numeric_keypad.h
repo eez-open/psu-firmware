@@ -73,8 +73,8 @@ enum NumericKeypadState {
 
 class NumericKeypad : public Keypad {
 public:
-    void init(const char *label, const eez::mw::gui::data::Value& value, NumericKeypadOptions &options, void (*ok)(float), void (*cancel)());
-    static NumericKeypad *start(const char *label, const eez::mw::gui::data::Value& value, NumericKeypadOptions &options, void (*ok)(float), void (*cancel)() = 0);
+    void init(const char *label, const eez::mw::gui::data::Value& value, NumericKeypadOptions &options, void (*okFloat)(float), void(*okUint32)(uint32_t), void (*cancel)());
+    static NumericKeypad *start(const char *label, const eez::mw::gui::data::Value& value, NumericKeypadOptions &options, void(*okFloat)(float), void(*okUint32)(uint32_t), void(*cancel)());
 
     bool isEditing();
 
@@ -111,6 +111,9 @@ public:
 private:
 	eez::mw::gui::data::Value m_startValue;
     NumericKeypadState m_state;
+	void (*m_okFloatCallback)(float);
+	void (*m_okUint32Callback)(uint32_t);
+	void (*m_cancelCallback)();
 
     void appendEditUnit(char *text);
     float getValue();

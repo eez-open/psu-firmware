@@ -725,7 +725,7 @@ void changeLimit(Channel& channel, const data::Value& value, float minLimit, flo
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	NumericKeypad::start(0, value, options, onSetLimit);
+	NumericKeypad::start(0, value, options, onSetLimit, 0, 0);
 }
 
 void onSetVoltageLimit(float limit) {

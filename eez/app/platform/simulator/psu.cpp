@@ -53,6 +53,8 @@ char *getConfFilePath(const char *file_name) {
 		_mkdir(file_path);
 		strcat(file_path, "\\");
 	}
+#elif defined(__EMSCRIPTEN__)
+	strcat(file_path, "/persistent_data/");
 #else
 	const char *home_dir = 0;
 	if ((home_dir = getenv("HOME")) == NULL) {
@@ -169,10 +171,12 @@ void exit() {
 }
 } // namespace eez::app
 
+#if !defined(__EMSCRIPTEN__)
 void eez_app_boot() {
 	eez::app::simulator::init();
 	eez::app::boot();
 }
+#endif
 
 void eez_app_tick() {
 	eez::app::simulator::tick();

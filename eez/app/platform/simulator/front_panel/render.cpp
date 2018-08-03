@@ -33,7 +33,7 @@ namespace front_panel {
 
 #if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R1B9
 static WindowDefinition window_definition_small = {
-    "EEZ Software Simulator",
+    "EEZ PSU Simulator",
     1475, 531,
     10,
     "eez.png"
@@ -42,14 +42,14 @@ static WindowDefinition window_definition_small = {
 static WindowDefinition window_definition_large = window_definition_small;
 #elif EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R3B4 || EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 static WindowDefinition window_definition_small = {
-    "EEZ Software Simulator",
+    "EEZ PSU Simulator",
     1081, 366,
     10,
     "eez.png"
 };
 
 static WindowDefinition window_definition_large = {
-    "EEZ Software Simulator",
+    "EEZ PSU Simulator",
     2 * 1081, 2 * 366,
     10,
     "eez.png"

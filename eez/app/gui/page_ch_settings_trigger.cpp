@@ -89,7 +89,7 @@ void ChSettingsTriggerPage::editVoltageTriggerValue() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	NumericKeypad::start(0, MakeValue(trigger::getVoltage(*g_channel), UNIT_VOLT, g_channel->index-1), options, onVoltageTriggerValueSet);
+	NumericKeypad::start(0, MakeValue(trigger::getVoltage(*g_channel), UNIT_VOLT, g_channel->index-1), options, onVoltageTriggerValueSet, 0, 0);
 }
 
 void ChSettingsTriggerPage::onCurrentTriggerValueSet(float value) {
@@ -114,7 +114,7 @@ void ChSettingsTriggerPage::editCurrentTriggerValue() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	NumericKeypad::start(0, MakeValue(trigger::getCurrent(*g_channel), UNIT_AMPER, g_channel->index-1), options, onCurrentTriggerValueSet);
+	NumericKeypad::start(0, MakeValue(trigger::getCurrent(*g_channel), UNIT_AMPER, g_channel->index-1), options, onCurrentTriggerValueSet, 0, 0);
 }
 
 void ChSettingsTriggerPage::toggleOutputState() {
@@ -156,7 +156,7 @@ void ChSettingsTriggerPage::editListCount() {
     options.option1ButtonText = INF_TEXT;
     options.option1 = onListCountSetToInfinity;
 
-	NumericKeypad::start(0, data::Value((uint16_t)list::getListCount(*g_channel)), options, onListCountSet);
+	NumericKeypad::start(0, data::Value((uint16_t)list::getListCount(*g_channel)), options, onListCountSet, 0, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -355,7 +355,7 @@ void ChSettingsListsPage::edit() {
         }
 		strcat(label, "]: ");
 
-	    NumericKeypad::start(label, value, options, onValueSet);
+	    NumericKeypad::start(label, value, options, onValueSet, 0, 0);
     } else {
         m_iCursor = getCursorIndex(g_foundWidgetAtDown.cursor, widget->data);
 

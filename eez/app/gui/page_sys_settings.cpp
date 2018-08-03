@@ -140,7 +140,7 @@ void SysSettingsDateTimePage::edit() {
 
 	if (label) {
 		editDataId = id;
-		NumericKeypad::start(label, value, options, onSetValue);
+		NumericKeypad::start(label, value, options, onSetValue, 0, 0);
 	}
 }
 
@@ -324,7 +324,7 @@ void SysSettingsEthernetPage::editScpiPort() {
 
     options.enableDefButton();
 
-	NumericKeypad::start(0, data::Value((int)m_scpiPort, VALUE_TYPE_PORT), options, (void (*)(float))onSetScpiPort);
+	NumericKeypad::start(0, data::Value((int)m_scpiPort, VALUE_TYPE_PORT), options, onSetScpiPort, 0, 0);
 }
 
 void SysSettingsEthernetPage::onSetMacAddress(char *value) {
@@ -388,7 +388,7 @@ void SysSettingsEthernetStaticPage::editAddress(uint32_t &address) {
 
 	NumericKeypadOptions options;
 
-	NumericKeypad::start(0, data::Value((uint32_t)address, VALUE_TYPE_IP_ADDRESS), options, (void (*)(float))onAddressSet);
+	NumericKeypad::start(0, data::Value((uint32_t)address, VALUE_TYPE_IP_ADDRESS), options, 0, onAddressSet, 0);
 }
 
 void SysSettingsEthernetStaticPage::editIpAddress() {
@@ -519,7 +519,7 @@ void SysSettingsAuxOtpPage::editLevel() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	NumericKeypad::start(0, level, options, onLevelSet);
+	NumericKeypad::start(0, level, options, onLevelSet, 0, 0);
 }
 
 void SysSettingsAuxOtpPage::onDelaySet(float value) {
@@ -542,7 +542,7 @@ void SysSettingsAuxOtpPage::editDelay() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	NumericKeypad::start(0, delay, options, onDelaySet);
+	NumericKeypad::start(0, delay, options, onDelaySet, 0, 0);
 }
 
 void SysSettingsAuxOtpPage::setParams() {
@@ -648,7 +648,7 @@ void SysSettingsTriggerPage::editDelay() {
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	NumericKeypad::start(0, MakeValue(trigger::getDelay(), UNIT_SECOND), options, onDelaySet);
+	NumericKeypad::start(0, MakeValue(trigger::getDelay(), UNIT_SECOND), options, onDelaySet, 0, 0);
 }
 
 void SysSettingsTriggerPage::toggleInitiateContinuously() {

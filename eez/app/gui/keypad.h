@@ -65,16 +65,17 @@ protected:
     char m_label[64];
     char m_keypadText[MAX_KEYPAD_TEXT_LENGTH + 2];
     int m_maxChars;
-    void (*m_okCallback)(char *); // +2 for cursor and zero at the end
-    void (*m_cancelCallback)();
 
-    void init(const char *label, void (*ok)(char *), void (*cancel)());
+    void init(const char *label);
 
 private:
     bool m_isPassword;
     uint32_t m_lastKeyAppendTime;
     bool m_cursor;
     uint32_t m_lastCursorChangeTime;
+
+	void (*m_okCallback)(char *); // +2 for cursor and zero at the end
+	void (*m_cancelCallback)();
 
     void start(const char *label, const char *text, int maxChars_, bool isPassword_, void (*ok)(char *), void (*cancel)());
 };
