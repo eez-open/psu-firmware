@@ -75,8 +75,12 @@ void NumericKeypadOptions::defOption() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void NumericKeypad::init(const char *label, const data::Value& value, NumericKeypadOptions &options, void (*ok)(float), void (*cancel)()) {
-    Keypad::init(label, (void (*)(char *))ok, cancel);
+void NumericKeypad::init(const char *label, const data::Value& value, NumericKeypadOptions &options, void (*okFloat)(float), void(*okUint32)(uint32_t), void (*cancel)()) {
+    Keypad::init(label);
+
+	m_okFloatCallback = okFloat;
+	m_okUint32Callback = okUint32;
+	m_cancelCallback = cancel;
 
     m_startValue = value;
 
@@ -100,10 +104,10 @@ void NumericKeypad::init(const char *label, const data::Value& value, NumericKey
     }
 }
 
-NumericKeypad *NumericKeypad::start(const char *label, const data::Value& value, NumericKeypadOptions &options, void (*ok)(float), void (*cancel)()) {
+NumericKeypad *NumericKeypad::start(const char *label, const data::Value& value, NumericKeypadOptions &options, void(*okFloat)(float), void(*okUint32)(uint32_t), void(*cancel)()) {
     NumericKeypad *page = new NumericKeypad();
 
-    page->init(label, value, options, ok, cancel);
+    page->init(label, value, options, okFloat, okUint32, cancel);
 
     pushPage(PAGE_ID_NUMERIC_KEYPAD, page);
 
@@ -439,21 +443,21 @@ void NumericKeypad::option2() {
 }
 
 void NumericKeypad::setMaxValue() {
-    ((void (*)(float))m_okCallback)(m_options.max);
+    m_okFloatCallback(m_options.max);
 }
 
 void NumericKeypad::setDefValue() {
-    ((void (*)(float))m_okCallback)(m_options.def);
+	m_okFloatCallback(m_options.def);
 }
 
 void NumericKeypad::ok() {
     if (m_state == START) {
         if (m_startValue.getType() == VALUE_TYPE_IP_ADDRESS) {
-            ((void (*)(uint32_t))m_okCallback)(m_startValue.getUInt32());
+			m_okFloatCallback(m_startValue.getUInt32());
 		} else if (m_startValue.getType() == VALUE_TYPE_TIME_ZONE) {
-			((void(*)(float))m_okCallback)(m_startValue.getInt() / 100.0f);
+			m_okFloatCallback(m_startValue.getInt() / 100.0f);
 		} else {
-            ((void (*)(float))m_okCallback)(m_startValue.isFloat() ? m_startValue.getFloat() : m_startValue.getInt());
+			m_okFloatCallback(m_startValue.isFloat() ? m_startValue.getFloat() : m_startValue.getInt());
         }
 
         return;
@@ -463,7 +467,7 @@ void NumericKeypad::ok() {
         if (m_startValue.getType() == VALUE_TYPE_IP_ADDRESS) {
             uint32_t ipAddress;
             if (parseIpAddress(m_keypadText, strlen(m_keypadText), ipAddress)) {
-                ((void (*)(uint32_t))m_okCallback)(ipAddress);
+                m_okUint32Callback(ipAddress);
                 m_state = START;
                 m_keypadText[0] = 0;
             } else {
@@ -479,7 +483,7 @@ void NumericKeypad::ok() {
             } else if (greater(value, m_options.max, m_startValue.getUnit(), m_options.channelIndex)) {
                 errorMessage(0, MakeGreaterThenMaxMessageValue(m_options.max, m_startValue));
             } else {
-                ((void (*)(float))m_okCallback)(value);
+				m_okFloatCallback(value);
                 m_state = START;
                 m_keypadText[0] = 0;
                 return;

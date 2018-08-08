@@ -88,9 +88,9 @@ bool AnalogDigitalConverter::test() {
     digitalWrite(channel.adc_pin, LOW);
 
     SPI.transfer(ADC_RD3S1);
-    byte reg1 = SPI.transfer(0);
-    byte reg2 = SPI.transfer(0);
-    byte reg3 = SPI.transfer(0);
+    uint8_t reg1 = SPI.transfer(0);
+    uint8_t reg2 = SPI.transfer(0);
+    uint8_t reg3 = SPI.transfer(0);
 
     digitalWrite(channel.adc_pin, HIGH);
     digitalWrite(channel.isolator_pin, ISOLATOR_DISABLE);

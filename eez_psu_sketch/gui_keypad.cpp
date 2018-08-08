@@ -65,14 +65,12 @@ Keypad::Keypad() {
     m_isPassword = false;
 }
 
-void Keypad::init(const char *label_, void (*ok)(char *), void (*cancel)()) {
+void Keypad::init(const char *label_) {
     if (label_) {
 	    strcpy(m_label, label_);
     } else {
         m_label[0] = 0;
     }
-	m_okCallback = ok;
-	m_cancelCallback = cancel;
 
 	m_lastCursorChangeTime = micros();
 }
@@ -120,7 +118,10 @@ void Keypad::getKeypadText(char *text) {
 }
 
 void Keypad::start(const char *label, const char *text, int maxChars_, bool isPassword_, void (*ok)(char *), void (*cancel)()) {
-	init(label, ok, cancel);
+	init(label);
+
+	m_okCallback = ok;
+	m_cancelCallback = cancel;
 
 	m_maxChars = maxChars_;
 	m_isPassword = isPassword_;

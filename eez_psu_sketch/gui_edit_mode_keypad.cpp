@@ -33,8 +33,8 @@ NumericKeypad *g_keypad;
 
 ////////////////////////////////////////////////////////////////////////////////
 
-bool onKeypadOk(float value) {
-	return edit_mode::setValue(value);
+void onKeypadOk(float value) {
+	edit_mode::setValue(value);
 }
 
 void enter(Channel &channel, const mw::gui::data::Value& editValue, const mw::gui::data::Value& minValue, mw::gui::data::Value& maxValue) {
@@ -55,7 +55,7 @@ void enter(Channel &channel, const mw::gui::data::Value& editValue, const mw::gu
 	options.flags.signButtonEnabled = true;
 	options.flags.dotButtonEnabled = true;
 
-	g_keypad->init(0, editValue, options, (void (*)(float))onKeypadOk, 0);
+	g_keypad->init(0, editValue, options, onKeypadOk, 0, 0);
 }
 
 void exit() {

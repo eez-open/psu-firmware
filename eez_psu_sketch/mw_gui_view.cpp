@@ -89,7 +89,7 @@ static DrawFunctionType g_drawWidgetFunctions[] = {
 	ListGraphWidget_draw, // WIDGET_TYPE_LIST_GRAPH
 };
 
-extern OnTouchFunctionType g_onTouchFunctions[] = {
+OnTouchFunctionType g_onTouchFunctions[] = {
 	NULL, // WIDGET_TYPE_NONE
 	NULL, // WIDGET_TYPE_CONTAINER
 	NULL, // WIDGET_TYPE_LIST
