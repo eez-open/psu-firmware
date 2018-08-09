@@ -2282,6 +2282,7 @@
     {
       "name": "R3B4",
       "buildConfiguration": "R3B4",
+      "buildFolder": "build/extensions",
       "image": "images/r3b4-front-panel.png",
       "extensionName": "eez_h24005_r3b4",
       "idn": "Envox,EEZ H24005 (Due)",
@@ -2300,6 +2301,7 @@
     {
       "name": "R5B12",
       "buildConfiguration": "R5B12",
+      "buildFolder": "build/extensions",
       "image": "images/r5b12-front-panel.png",
       "extensionName": "eez_h24005_r5b12",
       "idn": "Envox,EEZ H24005 (Due)",
@@ -2318,6 +2320,7 @@
       "name": "Simulator",
       "doNotBuild": false,
       "buildConfiguration": "Simulator",
+      "buildFolder": "build/extensions",
       "image": "images/simulator-front-panel.png",
       "extensionName": "eez_h24005_simulator",
       "idn": "Envox,EEZ H24005 (Simulator)",
