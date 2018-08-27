@@ -882,13 +882,17 @@ void channelToggleOutput() {
 void channelInitiateTrigger() {
 	popPage();
 	int err = trigger::initiate();
-	if (err != SCPI_RES_OK) {
+	if (err == SCPI_RES_OK) {
+		Channel& channel = Channel::get(g_toggleOutputWidgetCursor.cursor.i >= 0 ? g_toggleOutputWidgetCursor.cursor.i : 0);
+		channel_dispatcher::outputEnable(channel, true);
+	} else {
 		mw::gui::errorMessage(g_toggleOutputWidgetCursor.cursor, data::MakeScpiErrorValue(err));
 	}
 }
 
 void channelSetToFixed() {
 	popPage();
+
 	Channel& channel = Channel::get(g_toggleOutputWidgetCursor.cursor.i >= 0 ? g_toggleOutputWidgetCursor.cursor.i : 0);
 	if (channel_dispatcher::getVoltageTriggerMode(channel) != TRIGGER_MODE_FIXED) {
 		channel_dispatcher::setVoltageTriggerMode(channel, TRIGGER_MODE_FIXED);
