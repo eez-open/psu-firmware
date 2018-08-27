@@ -1530,7 +1530,7 @@ void tick(uint32_t tick_usec) {
 #if OPTION_ENCODER
     int counter;
     bool clicked;
-    encoder::read(counter, clicked);
+    encoder::read(tick_usec, counter, clicked);
     if (counter != 0 || clicked) {
         idle::noteEncoderActivity();
     }

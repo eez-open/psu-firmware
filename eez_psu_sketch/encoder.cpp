@@ -70,6 +70,12 @@ volatile int g_acceleration;
 volatile uint32_t g_switchLastTime = 0;
 volatile int g_switchCounter = 0;
 
+uint32_t g_maxDiff;
+
+void updateMaxDiff() {
+    g_maxDiff = CONF_ENCODER_ACCELERATION_INCREMENT_FACTOR * MAX(g_speedUp, g_speedDown) * 1000UL / CONF_ENCODER_ACCELERATION_DECREMENT_PER_MS;
+}
+
 void abInterruptHandler() {
     uint8_t pinState = (digitalRead(ENC_B) << 1) | digitalRead(ENC_A);
 
@@ -127,10 +133,16 @@ void init() {
     attachInterrupt(digitalPinToInterrupt(ENC_B), abInterruptHandler, CHANGE);
 
     attachInterrupt(digitalPinToInterrupt(ENC_SW), swInterruptHandler, CHANGE);
+
+    updateMaxDiff();
 }
 
-void read(int &counter, bool &clicked) {
+void read(uint32_t tickCount, int &counter, bool &clicked) {
     noInterrupts();
+
+    if (tickCount - g_rotationLastTime > g_maxDiff) {
+        g_rotationLastTime = tickCount - g_maxDiff;
+    }
 
     counter = g_rotationCounter;
     g_rotationCounter = 0;
@@ -151,6 +163,8 @@ void enableAcceleration(bool enable) {
 void setMovingSpeed(uint8_t down, uint8_t up) {
     g_speedDown = down;
     g_speedUp = up;
+
+    updateMaxDiff();
 }
 
 #ifdef EEZ_PSU_SIMULATOR
