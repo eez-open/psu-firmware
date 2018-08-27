@@ -45,16 +45,16 @@ namespace encoder {
 // Use the half-step state table (emits a code at 00 and 11)
 const uint8_t ttable[6][4] = {
 	{ 0x3 , 0x2, 0x1,  0x0 },{ 0x23, 0x0, 0x1,  0x0 },
-{ 0x13, 0x2, 0x0,  0x0 },{ 0x3 , 0x5, 0x4,  0x0 },
-{ 0x3 , 0x3, 0x4, 0x10 },{ 0x3 , 0x5, 0x3, 0x20 }
+	{ 0x13, 0x2, 0x0,  0x0 },{ 0x3 , 0x5, 0x4,  0x0 },
+	{ 0x3 , 0x3, 0x4, 0x10 },{ 0x3 , 0x5, 0x3, 0x20 }
 };
 #else
 // Use the full-step state table (emits a code at 00 only)
 const uint8_t ttable[7][4] = {
 	{ 0x0, 0x2, 0x4,  0x0 },{ 0x3, 0x0, 0x1, 0x10 },
-{ 0x3, 0x2, 0x0,  0x0 },{ 0x3, 0x2, 0x1,  0x0 },
-{ 0x6, 0x0, 0x4,  0x0 },{ 0x6, 0x5, 0x0, 0x10 },
-{ 0x6, 0x5, 0x4,  0x0 },
+	{ 0x3, 0x2, 0x0,  0x0 },{ 0x3, 0x2, 0x1,  0x0 },
+	{ 0x6, 0x0, 0x4,  0x0 },{ 0x6, 0x5, 0x0, 0x10 },
+	{ 0x6, 0x5, 0x4,  0x0 },
 };
 #endif
 
@@ -69,6 +69,12 @@ volatile int g_acceleration;
 
 volatile uint32_t g_switchLastTime = 0;
 volatile int g_switchCounter = 0;
+
+uint32_t g_maxDiff;
+
+void updateMaxDiff() {
+    g_maxDiff = CONF_ENCODER_ACCELERATION_INCREMENT_FACTOR * MAX(g_speedUp, g_speedDown) * 1000UL / CONF_ENCODER_ACCELERATION_DECREMENT_PER_MS;
+}
 
 void abInterruptHandler() {
 	uint8_t pinState = (digitalRead(ENC_B) << 1) | digitalRead(ENC_A);
@@ -127,10 +133,16 @@ void init() {
 	attachInterrupt(digitalPinToInterrupt(ENC_B), abInterruptHandler, CHANGE);
 
 	attachInterrupt(digitalPinToInterrupt(ENC_SW), swInterruptHandler, CHANGE);
+
+    updateMaxDiff();
 }
 
-void read(int &counter, bool &clicked) {
+void read(uint32_t tickCount, int &counter, bool &clicked) {
 	noInterrupts();
+
+    if (tickCount - g_rotationLastTime > g_maxDiff) {
+        g_rotationLastTime = tickCount - g_maxDiff;
+    }
 
 	counter = g_rotationCounter;
 	g_rotationCounter = 0;
@@ -151,6 +163,8 @@ void enableAcceleration(bool enable) {
 void setMovingSpeed(uint8_t down, uint8_t up) {
 	g_speedDown = down;
 	g_speedUp = up;
+
+    updateMaxDiff();
 }
 
 }

@@ -32,7 +32,7 @@ int g_switchCounter = 0;
 void init() {
 }
 
-void read(int &counter, bool &clicked) {
+void read(uint32_t tickCount, int &counter, bool &clicked) {
 	counter = g_rotationCounter;
 	g_rotationCounter = 0;
 

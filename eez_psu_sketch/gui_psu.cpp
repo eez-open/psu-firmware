@@ -445,7 +445,7 @@ void tick(uint32_t tickCount) {
 #if OPTION_ENCODER
 	int counter;
 	bool clicked;
-	encoder::read(counter, clicked);
+	encoder::read(tickCount, counter, clicked);
 	if (counter != 0 || clicked) {
 		idle::noteEncoderActivity();
 	}
