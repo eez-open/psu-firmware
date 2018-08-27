@@ -356,17 +356,13 @@ void gui_touchHandling(uint32_t tick_usec) {
 void onInternalPageTouch(const WidgetCursor &widgetCursor, Event &touchEvent) {
 	if (touchEvent.type == EVENT_TYPE_TOUCH_DOWN) {
 		if (g_foundWidgetAtDown) {
-			if (isWidgetActionEnabled(g_foundWidgetAtDown)) {
-				selectWidget(g_foundWidgetAtDown);
-			}
+			selectWidget(g_foundWidgetAtDown);
 		}
 	} else if (touchEvent.type == EVENT_TYPE_TOUCH_UP) {
 		if (g_foundWidgetAtDown) {
-			if (isWidgetActionEnabled(g_foundWidgetAtDown)) {
-				deselectWidget();
-				int action = getAction(g_foundWidgetAtDown);
-				executeAction(action);
-			}
+			deselectWidget();
+			int action = getAction(g_foundWidgetAtDown);
+			executeAction(action);
 		} else {
 			DECL_WIDGET(page, getPageOffset(getActivePageId()));
 			DECL_WIDGET_SPECIFIC(PageWidget, pageSpecific, page);
