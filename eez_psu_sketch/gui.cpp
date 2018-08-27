@@ -1145,7 +1145,10 @@ void channelToggleOutput() {
 void channelInitiateTrigger() {
     popPage();
     int err = trigger::initiate();
-    if (err != SCPI_RES_OK) {
+    if (err == SCPI_RES_OK) {
+        Channel& channel = Channel::get(g_toggleOutputWidgetCursor.cursor.i >= 0 ? g_toggleOutputWidgetCursor.cursor.i : 0);        
+        channel_dispatcher::outputEnable(channel, true);
+    } else {
         errorMessage(g_toggleOutputWidgetCursor.cursor, data::Value::ScpiErrorText(err));
     }
 }
