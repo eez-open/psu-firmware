@@ -2299,6 +2299,7 @@
     {
       "name": "R3B4",
       "buildConfiguration": "R3B4",
+      "buildFolder": "build/extensions",
       "image": "images/r3b4-front-panel.png",
       "extensionName": "eez_h24005_r3b4",
       "idn": "Envox,EEZ H24005 (Due)",
@@ -2307,7 +2308,7 @@
       "idfShortName": "H24005-R3B4",
       "idfFirmwareVersion": "1.1",
       "idfGuid": "d0964223-a599-43f6-8aa2-4eb52f76a395",
-      "idfRevisionNumber": "0",
+      "idfRevisionNumber": "1.1.1",
       "idfDescription": "EEZ H24005 two channel power supply",
       "idfSupportedModels": "H24005 r3B4",
       "idfRevisionComments": "Initial version",
@@ -2317,6 +2318,7 @@
     {
       "name": "R5B12",
       "buildConfiguration": "R5B12",
+      "buildFolder": "build/extensions",
       "image": "images/r5b12-front-panel.png",
       "extensionName": "eez_h24005_r5b12",
       "idn": "Envox,EEZ H24005 (Due)",
@@ -2324,7 +2326,7 @@
       "idfShortName": "H24005-R5B12",
       "idfFirmwareVersion": "1.1",
       "idfGuid": "d2283db7-1e5f-4020-aa2b-bedeee6343a2",
-      "idfRevisionNumber": "0",
+      "idfRevisionNumber": "1.1.1",
       "idfDescription": "EEZ H24005 two channel power supply",
       "idfSupportedModels": "H24005 r5B12",
       "idfRevisionComments": "Initial version",
@@ -2335,6 +2337,7 @@
       "name": "Simulator",
       "doNotBuild": false,
       "buildConfiguration": "Simulator",
+      "buildFolder": "build/extensions",
       "image": "images/simulator-front-panel.png",
       "extensionName": "eez_h24005_simulator",
       "idn": "Envox,EEZ H24005 (Simulator)",
@@ -2342,7 +2345,7 @@
       "idfShortName": "H24005sim",
       "idfFirmwareVersion": "1.1",
       "idfGuid": "6f5029f7-a785-445d-af5b-9b66fa13eeca",
-      "idfRevisionNumber": "0",
+      "idfRevisionNumber": "1.1.1",
       "idfDescription": "Simulator for EEZ H24005 power supply",
       "idfSupportedModels": "H24005",
       "idfRevisionComments": "Initial version",
@@ -3249,7 +3252,11 @@
                   "height": 36,
                   "text": "N"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Rectangle",
@@ -3353,9 +3360,17 @@
                                 "width": 240,
                                 "height": 88
                               }
-                            ]
+                            ],
+                            "editor": {
+                              "x": 350,
+                              "y": 0
+                            }
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       },
                       {
                         "type": "Select",
@@ -3386,7 +3401,11 @@
                             "width": 106,
                             "height": 40
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       },
                       {
                         "type": "Select",
@@ -3417,7 +3436,11 @@
                             "width": 106,
                             "height": 40
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       },
                       {
                         "type": "Text",
@@ -3440,7 +3463,11 @@
                     "height": 128,
                     "text": "ERROR"
                   }
-                ]
+                ],
+                "editor": {
+                  "x": 350,
+                  "y": 0
+                }
               },
               "listType": "vertical"
             },
@@ -3558,7 +3585,11 @@
                   "width": 240,
                   "height": 28
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             }
           ]
         },
@@ -3617,7 +3648,11 @@
                   "height": 28,
                   "text": "\\u0083"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Select",
@@ -3677,7 +3712,11 @@
                       "height": 28,
                       "text": "\\u0089"
                     }
-                  ]
+                  ],
+                  "editor": {
+                    "x": 350,
+                    "y": 0
+                  }
                 },
                 {
                   "type": "Rectangle",
@@ -3687,7 +3726,11 @@
                   "width": 28,
                   "height": 28
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Select",
@@ -3732,7 +3775,11 @@
                       "height": 28,
                       "text": "\\u0094"
                     }
-                  ]
+                  ],
+                  "editor": {
+                    "x": 350,
+                    "y": 0
+                  }
                 },
                 {
                   "type": "Rectangle",
@@ -3752,7 +3799,11 @@
                   "width": 28,
                   "height": 28
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Select",
@@ -3820,7 +3871,11 @@
                           "height": 28,
                           "text": "\\u0095"
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     },
                     {
                       "type": "Rectangle",
@@ -3841,9 +3896,17 @@
                       "height": 28,
                       "text": "\\u0095"
                     }
-                  ]
+                  ],
+                  "editor": {
+                    "x": 350,
+                    "y": 0
+                  }
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Select",
@@ -3882,7 +3945,11 @@
                   "width": 30,
                   "height": 28
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Select",
@@ -3949,7 +4016,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -4061,9 +4132,17 @@
                                         "width": 160,
                                         "height": 56
                                       }
-                                    ]
+                                    ],
+                                    "editor": {
+                                      "x": 350,
+                                      "y": 0
+                                    }
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -4094,7 +4173,11 @@
                                     "height": 24,
                                     "text": "LRip"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -4135,7 +4218,11 @@
                                     "height": 24,
                                     "text": "OCP"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -4176,7 +4263,11 @@
                                     "height": 24,
                                     "text": "OVP"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -4217,7 +4308,11 @@
                                     "height": 24,
                                     "text": "OTP"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -4258,7 +4353,11 @@
                                     "height": 24,
                                     "text": "OPP"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -4317,7 +4416,11 @@
                                                 "height": 43,
                                                 "activeStyle": "mon_value_focus"
                                               }
-                                            ]
+                                            ],
+                                            "editor": {
+                                              "x": 350,
+                                              "y": 0
+                                            }
                                           },
                                           {
                                             "type": "DisplayData",
@@ -4329,7 +4432,11 @@
                                             "width": 112,
                                             "height": 43
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       },
                                       {
                                         "type": "Select",
@@ -4362,7 +4469,11 @@
                                             "height": 40,
                                             "activeStyle": "mon_value_focus"
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       }
                                     ]
                                   },
@@ -4379,7 +4490,11 @@
                                     "enabled": "trigger.isManual",
                                     "disabledStyle": "default"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Text",
@@ -4402,7 +4517,11 @@
                             "height": 176,
                             "text": "ERROR"
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       },
                       "listType": "horizontal"
                     },
@@ -4578,9 +4697,17 @@
                                           }
                                         ]
                                       }
-                                    ]
+                                    ],
+                                    "editor": {
+                                      "x": 350,
+                                      "y": 0
+                                    }
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -4639,7 +4766,11 @@
                                                 "height": 28,
                                                 "activeStyle": "edit_value_focus_S_right"
                                               }
-                                            ]
+                                            ],
+                                            "editor": {
+                                              "x": 350,
+                                              "y": 0
+                                            }
                                           },
                                           {
                                             "type": "DisplayData",
@@ -4651,7 +4782,11 @@
                                             "width": 65,
                                             "height": 28
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       },
                                       {
                                         "type": "Rectangle",
@@ -4692,7 +4827,11 @@
                                             "height": 28,
                                             "activeStyle": "edit_value_focus_S_right"
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       }
                                     ]
                                   },
@@ -4709,7 +4848,11 @@
                                     "enabled": "trigger.isManual",
                                     "disabledStyle": "edit_value_S_centered"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Rectangle",
@@ -4748,7 +4891,11 @@
                                     "height": 24,
                                     "text": "LRip"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -4789,7 +4936,11 @@
                                     "height": 24,
                                     "text": "OCP"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -4830,7 +4981,11 @@
                                     "height": 24,
                                     "text": "OVP"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -4871,7 +5026,11 @@
                                     "height": 24,
                                     "text": "OTP"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -4912,7 +5071,11 @@
                                     "height": 24,
                                     "text": "OPP"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "DisplayData",
@@ -4950,7 +5113,11 @@
                             "height": 88,
                             "text": "ERROR"
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       },
                       "listType": "vertical"
                     },
@@ -5142,9 +5309,17 @@
                                           }
                                         ]
                                       }
-                                    ]
+                                    ],
+                                    "editor": {
+                                      "x": 350,
+                                      "y": 0
+                                    }
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -5175,7 +5350,11 @@
                                     "height": 24,
                                     "text": "LRip"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -5216,7 +5395,11 @@
                                     "height": 24,
                                     "text": "OCP"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -5257,7 +5440,11 @@
                                     "height": 24,
                                     "text": "OVP"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -5298,7 +5485,11 @@
                                     "height": 24,
                                     "text": "OTP"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -5339,7 +5530,11 @@
                                     "height": 24,
                                     "text": "OPP"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Rectangle",
@@ -5415,7 +5610,11 @@
                                                 "height": 24,
                                                 "activeStyle": "edit_S_focus"
                                               }
-                                            ]
+                                            ],
+                                            "editor": {
+                                              "x": 350,
+                                              "y": 0
+                                            }
                                           },
                                           {
                                             "type": "DisplayData",
@@ -5427,7 +5626,11 @@
                                             "width": 55,
                                             "height": 24
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       },
                                       {
                                         "type": "Select",
@@ -5460,7 +5663,11 @@
                                             "height": 24,
                                             "activeStyle": "edit_S_focus"
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       }
                                     ]
                                   },
@@ -5477,7 +5684,11 @@
                                     "enabled": "trigger.isManual",
                                     "disabledStyle": "edit_value_S_centered"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               }
                             ]
                           },
@@ -5490,7 +5701,11 @@
                             "height": 176,
                             "text": "ERROR"
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       },
                       "listType": "horizontal"
                     },
@@ -5592,9 +5807,17 @@
                                         "y2Data": "channel.displayValue2",
                                         "y2Style": "yt_graph_unregulated"
                                       }
-                                    ]
+                                    ],
+                                    "editor": {
+                                      "x": 350,
+                                      "y": 0
+                                    }
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -5653,7 +5876,11 @@
                                                 "height": 28,
                                                 "activeStyle": "edit_value_focus_S_right"
                                               }
-                                            ]
+                                            ],
+                                            "editor": {
+                                              "x": 350,
+                                              "y": 0
+                                            }
                                           },
                                           {
                                             "type": "DisplayData",
@@ -5665,7 +5892,11 @@
                                             "width": 62,
                                             "height": 28
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       },
                                       {
                                         "type": "Rectangle",
@@ -5706,7 +5937,11 @@
                                             "height": 28,
                                             "activeStyle": "edit_value_focus_S_right"
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       }
                                     ]
                                   },
@@ -5723,7 +5958,11 @@
                                     "enabled": "trigger.isManual",
                                     "disabledStyle": "edit_value_S_centered"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Rectangle",
@@ -5762,7 +6001,11 @@
                                     "height": 24,
                                     "text": "LRip"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -5803,7 +6046,11 @@
                                     "height": 24,
                                     "text": "OCP"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -5844,7 +6091,11 @@
                                     "height": 24,
                                     "text": "OVP"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -5885,7 +6136,11 @@
                                     "height": 24,
                                     "text": "OTP"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -5926,7 +6181,11 @@
                                     "height": 24,
                                     "text": "OPP"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "DisplayData",
@@ -5964,11 +6223,19 @@
                             "height": 88,
                             "text": "ERROR"
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       },
                       "listType": "vertical"
                     }
-                  ]
+                  ],
+                  "editor": {
+                    "x": 350,
+                    "y": 0
+                  }
                 },
                 {
                   "type": "Container",
@@ -6070,7 +6337,11 @@
                           "width": 320,
                           "height": 138
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     }
                   ]
                 },
@@ -6174,7 +6445,11 @@
                           "width": 320,
                           "height": 138
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     }
                   ]
                 },
@@ -6260,9 +6535,17 @@
                                         "width": 160,
                                         "height": 56
                                       }
-                                    ]
+                                    ],
+                                    "editor": {
+                                      "x": 350,
+                                      "y": 0
+                                    }
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -6293,7 +6576,11 @@
                                     "height": 24,
                                     "text": "LRip"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -6352,7 +6639,11 @@
                                                 "height": 43,
                                                 "activeStyle": "mon_value_focus"
                                               }
-                                            ]
+                                            ],
+                                            "editor": {
+                                              "x": 350,
+                                              "y": 0
+                                            }
                                           },
                                           {
                                             "type": "DisplayData",
@@ -6364,7 +6655,11 @@
                                             "width": 112,
                                             "height": 43
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       },
                                       {
                                         "type": "Select",
@@ -6397,7 +6692,11 @@
                                             "height": 40,
                                             "activeStyle": "mon_value_focus"
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       }
                                     ]
                                   },
@@ -6414,7 +6713,11 @@
                                     "enabled": "trigger.isManual",
                                     "disabledStyle": "default"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               }
                             ]
                           },
@@ -6467,7 +6770,11 @@
                                   "height": 24,
                                   "text": "OCP"
                                 }
-                              ]
+                              ],
+                              "editor": {
+                                "x": 350,
+                                "y": 0
+                              }
                             },
                             {
                               "type": "Select",
@@ -6508,7 +6815,11 @@
                                   "height": 24,
                                   "text": "OVP"
                                 }
-                              ]
+                              ],
+                              "editor": {
+                                "x": 350,
+                                "y": 0
+                              }
                             },
                             {
                               "type": "Select",
@@ -6549,7 +6860,11 @@
                                   "height": 24,
                                   "text": "OTP"
                                 }
-                              ]
+                              ],
+                              "editor": {
+                                "x": 350,
+                                "y": 0
+                              }
                             },
                             {
                               "type": "Select",
@@ -6590,7 +6905,11 @@
                                   "height": 24,
                                   "text": "OPP"
                                 }
-                              ]
+                              ],
+                              "editor": {
+                                "x": 350,
+                                "y": 0
+                              }
                             },
                             {
                               "type": "Text",
@@ -6715,7 +7034,11 @@
                                   "height": 24,
                                   "text": "OCP"
                                 }
-                              ]
+                              ],
+                              "editor": {
+                                "x": 350,
+                                "y": 0
+                              }
                             },
                             {
                               "type": "Select",
@@ -6756,7 +7079,11 @@
                                   "height": 24,
                                   "text": "OVP"
                                 }
-                              ]
+                              ],
+                              "editor": {
+                                "x": 350,
+                                "y": 0
+                              }
                             },
                             {
                               "type": "Select",
@@ -6797,7 +7124,11 @@
                                   "height": 24,
                                   "text": "OTP"
                                 }
-                              ]
+                              ],
+                              "editor": {
+                                "x": 350,
+                                "y": 0
+                              }
                             },
                             {
                               "type": "Select",
@@ -6838,7 +7169,11 @@
                                   "height": 24,
                                   "text": "OPP"
                                 }
-                              ]
+                              ],
+                              "editor": {
+                                "x": 350,
+                                "y": 0
+                              }
                             }
                           ]
                         },
@@ -6987,9 +7322,17 @@
                                           }
                                         ]
                                       }
-                                    ]
+                                    ],
+                                    "editor": {
+                                      "x": 350,
+                                      "y": 0
+                                    }
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -7048,7 +7391,11 @@
                                                 "height": 28,
                                                 "activeStyle": "edit_value_focus_S_right"
                                               }
-                                            ]
+                                            ],
+                                            "editor": {
+                                              "x": 350,
+                                              "y": 0
+                                            }
                                           },
                                           {
                                             "type": "DisplayData",
@@ -7060,7 +7407,11 @@
                                             "width": 65,
                                             "height": 28
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       },
                                       {
                                         "type": "Rectangle",
@@ -7101,7 +7452,11 @@
                                             "height": 28,
                                             "activeStyle": "edit_value_focus_S_right"
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       }
                                     ]
                                   },
@@ -7118,7 +7473,11 @@
                                     "enabled": "trigger.isManual",
                                     "disabledStyle": "edit_value_S_centered"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Rectangle",
@@ -7157,7 +7516,11 @@
                                     "height": 24,
                                     "text": "LRip"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Rectangle",
@@ -7367,9 +7730,17 @@
                                           }
                                         ]
                                       }
-                                    ]
+                                    ],
+                                    "editor": {
+                                      "x": 350,
+                                      "y": 0
+                                    }
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -7400,7 +7771,11 @@
                                     "height": 24,
                                     "text": "LRip"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Rectangle",
@@ -7476,7 +7851,11 @@
                                                 "height": 24,
                                                 "activeStyle": "edit_S_focus"
                                               }
-                                            ]
+                                            ],
+                                            "editor": {
+                                              "x": 350,
+                                              "y": 0
+                                            }
                                           },
                                           {
                                             "type": "DisplayData",
@@ -7488,7 +7867,11 @@
                                             "width": 56,
                                             "height": 24
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       },
                                       {
                                         "type": "Select",
@@ -7521,7 +7904,11 @@
                                             "height": 24,
                                             "activeStyle": "edit_S_focus"
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       }
                                     ]
                                   },
@@ -7538,7 +7925,11 @@
                                     "enabled": "trigger.isManual",
                                     "disabledStyle": "edit_value_S_centered"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               }
                             ]
                           },
@@ -7591,7 +7982,11 @@
                                   "height": 24,
                                   "text": "OCP"
                                 }
-                              ]
+                              ],
+                              "editor": {
+                                "x": 350,
+                                "y": 0
+                              }
                             },
                             {
                               "type": "Select",
@@ -7632,7 +8027,11 @@
                                   "height": 24,
                                   "text": "OVP"
                                 }
-                              ]
+                              ],
+                              "editor": {
+                                "x": 350,
+                                "y": 0
+                              }
                             },
                             {
                               "type": "Select",
@@ -7673,7 +8072,11 @@
                                   "height": 24,
                                   "text": "OTP"
                                 }
-                              ]
+                              ],
+                              "editor": {
+                                "x": 350,
+                                "y": 0
+                              }
                             },
                             {
                               "type": "Select",
@@ -7714,7 +8117,11 @@
                                   "height": 24,
                                   "text": "OPP"
                                 }
-                              ]
+                              ],
+                              "editor": {
+                                "x": 350,
+                                "y": 0
+                              }
                             },
                             {
                               "type": "Text",
@@ -7849,7 +8256,11 @@
                                   "height": 24,
                                   "text": "OCP"
                                 }
-                              ]
+                              ],
+                              "editor": {
+                                "x": 350,
+                                "y": 0
+                              }
                             },
                             {
                               "type": "Select",
@@ -7890,7 +8301,11 @@
                                   "height": 24,
                                   "text": "OVP"
                                 }
-                              ]
+                              ],
+                              "editor": {
+                                "x": 350,
+                                "y": 0
+                              }
                             },
                             {
                               "type": "Select",
@@ -7931,7 +8346,11 @@
                                   "height": 24,
                                   "text": "OTP"
                                 }
-                              ]
+                              ],
+                              "editor": {
+                                "x": 350,
+                                "y": 0
+                              }
                             },
                             {
                               "type": "Select",
@@ -7972,7 +8391,11 @@
                                   "height": 24,
                                   "text": "OPP"
                                 }
-                              ]
+                              ],
+                              "editor": {
+                                "x": 350,
+                                "y": 0
+                              }
                             }
                           ]
                         },
@@ -8047,9 +8470,17 @@
                                         "y2Data": "channel.displayValue2",
                                         "y2Style": "yt_graph_unregulated"
                                       }
-                                    ]
+                                    ],
+                                    "editor": {
+                                      "x": 350,
+                                      "y": 0
+                                    }
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Select",
@@ -8108,7 +8539,11 @@
                                                 "height": 28,
                                                 "activeStyle": "edit_value_focus_S_right"
                                               }
-                                            ]
+                                            ],
+                                            "editor": {
+                                              "x": 350,
+                                              "y": 0
+                                            }
                                           },
                                           {
                                             "type": "DisplayData",
@@ -8120,7 +8555,11 @@
                                             "width": 62,
                                             "height": 28
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       },
                                       {
                                         "type": "Rectangle",
@@ -8161,7 +8600,11 @@
                                             "height": 28,
                                             "activeStyle": "edit_value_focus_S_right"
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       }
                                     ]
                                   },
@@ -8178,7 +8621,11 @@
                                     "enabled": "trigger.isManual",
                                     "disabledStyle": "edit_value_S_centered"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Rectangle",
@@ -8217,7 +8664,11 @@
                                     "height": 24,
                                     "text": "LRip"
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               },
                               {
                                 "type": "Rectangle",
@@ -8258,9 +8709,17 @@
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "editor": {
+                    "x": 350,
+                    "y": 0
+                  }
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -8334,7 +8793,11 @@
                   "height": 36,
                   "text": "N"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -8517,9 +8980,17 @@
                             "width": 120,
                             "height": 36
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       }
-                    ]
+                    ],
+                    "editor": {
+                      "x": 350,
+                      "y": 0
+                    }
                   },
                   {
                     "type": "DisplayData",
@@ -9150,9 +9621,17 @@
                                     "width": 60,
                                     "height": 30
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               }
-                            ]
+                            ],
+                            "editor": {
+                              "x": 350,
+                              "y": 0
+                            }
                           },
                           {
                             "type": "DisplayData",
@@ -9265,9 +9744,17 @@
                                     "width": 60,
                                     "height": 26
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               }
-                            ]
+                            ],
+                            "editor": {
+                              "x": 350,
+                              "y": 0
+                            }
                           },
                           {
                             "type": "DisplayData",
@@ -9313,7 +9800,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -9545,7 +10036,11 @@
                           "height": 23,
                           "text": "LRip"
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     },
                     {
                       "type": "Rectangle",
@@ -9653,7 +10148,11 @@
                                 "height": 26,
                                 "text": "LRip"
                               }
-                            ]
+                            ],
+                            "editor": {
+                              "x": 350,
+                              "y": 0
+                            }
                           },
                           {
                             "type": "DisplayData",
@@ -9686,7 +10185,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Select",
@@ -9735,7 +10238,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Local.Channels",
@@ -9955,9 +10462,17 @@
                                     "width": 60,
                                     "height": 30
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               }
-                            ]
+                            ],
+                            "editor": {
+                              "x": 350,
+                              "y": 0
+                            }
                           },
                           {
                             "type": "DisplayData",
@@ -10070,9 +10585,17 @@
                                     "width": 60,
                                     "height": 26
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               }
-                            ]
+                            ],
+                            "editor": {
+                              "x": 350,
+                              "y": 0
+                            }
                           },
                           {
                             "type": "DisplayData",
@@ -10118,7 +10641,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -10405,7 +10932,11 @@
                           "height": 23,
                           "text": "LRip"
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     },
                     {
                       "type": "Rectangle",
@@ -10513,7 +11044,11 @@
                                 "height": 26,
                                 "text": "LRip"
                               }
-                            ]
+                            ],
+                            "editor": {
+                              "x": 350,
+                              "y": 0
+                            }
                           },
                           {
                             "type": "DisplayData",
@@ -10546,7 +11081,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Select",
@@ -10595,7 +11134,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Local.Channels",
@@ -11670,7 +12213,11 @@
                     "width": 240,
                     "height": 28
                   }
-                ]
+                ],
+                "editor": {
+                  "x": 350,
+                  "y": 0
+                }
               },
               "listType": "vertical"
             },
@@ -11735,7 +12282,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -11811,7 +12362,11 @@
                     "width": 320,
                     "height": 28
                   }
-                ]
+                ],
+                "editor": {
+                  "x": 350,
+                  "y": 0
+                }
               },
               "listType": "vertical"
             },
@@ -11876,7 +12431,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -12461,9 +13020,17 @@
                             "width": 120,
                             "height": 36
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       }
-                    ]
+                    ],
+                    "editor": {
+                      "x": 350,
+                      "y": 0
+                    }
                   },
                   {
                     "type": "DisplayData",
@@ -13041,7 +13608,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -13122,7 +13693,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Rectangle",
@@ -13266,7 +13841,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "MultilineText",
@@ -13455,7 +14034,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -13514,7 +14097,11 @@
                   "height": 28,
                   "text": "Yes"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -13590,7 +14177,11 @@
                   "width": 78,
                   "height": 28
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Button",
@@ -13757,7 +14348,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -13821,7 +14416,11 @@
                       "height": 28,
                       "text": "\\u0089"
                     }
-                  ]
+                  ],
+                  "editor": {
+                    "x": 350,
+                    "y": 0
+                  }
                 }
               ]
             },
@@ -13863,7 +14462,11 @@
                   "height": 28,
                   "text": "Yes"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -13920,7 +14523,11 @@
                   "width": 78,
                   "height": 28
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Rectangle",
@@ -14095,7 +14702,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -14154,7 +14765,11 @@
                   "height": 28,
                   "text": "Yes"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -14230,7 +14845,11 @@
                   "width": 78,
                   "height": 28
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Button",
@@ -14397,7 +15016,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -14437,7 +15060,11 @@
                   "height": 28,
                   "text": "Yes"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -14541,7 +15168,11 @@
                           "height": 28,
                           "text": "Not installed"
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     },
                     {
                       "type": "Rectangle",
@@ -14615,7 +15246,11 @@
                                 "height": 28,
                                 "text": "Not installed"
                               }
-                            ]
+                            ],
+                            "editor": {
+                              "x": 350,
+                              "y": 0
+                            }
                           }
                         ]
                       },
@@ -14623,7 +15258,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Rectangle",
@@ -14798,7 +15437,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -14913,7 +15556,11 @@
                           "height": 28,
                           "text": "ON"
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     },
                     {
                       "type": "Text",
@@ -15016,11 +15663,19 @@
                           "height": 28,
                           "text": "On"
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -15225,7 +15880,11 @@
                         "height": 24,
                         "activeStyle": "edit_value_focus_S_center"
                       }
-                    ]
+                    ],
+                    "editor": {
+                      "x": 350,
+                      "y": 0
+                    }
                   },
                   {
                     "type": "Select",
@@ -15258,7 +15917,11 @@
                         "height": 24,
                         "activeStyle": "edit_value_focus_S_center"
                       }
-                    ]
+                    ],
+                    "editor": {
+                      "x": 350,
+                      "y": 0
+                    }
                   },
                   {
                     "type": "Select",
@@ -15291,7 +15954,11 @@
                         "height": 24,
                         "activeStyle": "edit_value_focus_S_center"
                       }
-                    ]
+                    ],
+                    "editor": {
+                      "x": 350,
+                      "y": 0
+                    }
                   }
                 ]
               },
@@ -15629,7 +16296,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Select",
@@ -15680,7 +16351,11 @@
                   "height": 28,
                   "text": "Low ripple mode"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -15720,7 +16395,11 @@
                   "height": 28,
                   "text": "Current ranges"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Select",
@@ -15770,9 +16449,17 @@
                       "height": 28,
                       "text": "Tracking control \\u008c"
                     }
-                  ]
+                  ],
+                  "editor": {
+                    "x": 350,
+                    "y": 0
+                  }
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Select",
@@ -15822,9 +16509,17 @@
                       "height": 28,
                       "text": "Coupling settings \\u008c"
                     }
-                  ]
+                  ],
+                  "editor": {
+                    "x": 350,
+                    "y": 0
+                  }
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -15986,7 +16681,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -16062,7 +16761,11 @@
                   "height": 42,
                   "text": "ON"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -16130,9 +16833,17 @@
                           "height": 42,
                           "text": "ON"
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     }
-                  ]
+                  ],
+                  "editor": {
+                    "x": 350,
+                    "y": 0
+                  }
                 },
                 {
                   "type": "Select",
@@ -16163,9 +16874,17 @@
                       "height": 42,
                       "text": "ON"
                     }
-                  ]
+                  ],
+                  "editor": {
+                    "x": 350,
+                    "y": 0
+                  }
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Rectangle",
@@ -16349,7 +17068,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Container",
@@ -16415,7 +17138,11 @@
                           "height": 28,
                           "text": "ON"
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     },
                     {
                       "type": "Text",
@@ -16427,7 +17154,11 @@
                       "height": 28,
                       "text": "OFF \\u008c"
                     }
-                  ]
+                  ],
+                  "editor": {
+                    "x": 350,
+                    "y": 0
+                  }
                 }
               ]
             },
@@ -16514,7 +17245,11 @@
                               "height": 28,
                               "text": "ON"
                             }
-                          ]
+                          ],
+                          "editor": {
+                            "x": 350,
+                            "y": 0
+                          }
                         },
                         {
                           "type": "Text",
@@ -16526,11 +17261,19 @@
                           "height": 28,
                           "text": "OFF \\u008c"
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -16675,7 +17418,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -16735,7 +17482,11 @@
                   "height": 28,
                   "text": "ON"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Select",
@@ -16783,7 +17534,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -16934,7 +17689,11 @@
                   "height": 42,
                   "text": "ON"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Rectangle",
@@ -17154,7 +17913,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Rectangle",
@@ -17296,7 +18059,11 @@
                   "height": 36,
                   "text": "Set series"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Rectangle",
@@ -17353,7 +18120,11 @@
                   "height": 42,
                   "text": "\\u0081 Take precautions with voltage over 50V"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             }
           ]
         }
@@ -17431,7 +18202,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -17768,7 +18543,11 @@
                           "height": 28,
                           "text": "Not installed"
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     },
                     {
                       "type": "Text",
@@ -17809,7 +18588,11 @@
                           "height": 28,
                           "text": "Recalibrate"
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     },
                     {
                       "type": "Text",
@@ -17870,9 +18653,17 @@
                               "height": 28,
                               "text": "Yes"
                             }
-                          ]
+                          ],
+                          "editor": {
+                            "x": 350,
+                            "y": 0
+                          }
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     },
                     {
                       "type": "Text",
@@ -18057,7 +18848,11 @@
                                 "height": 28,
                                 "text": "Not installed"
                               }
-                            ]
+                            ],
+                            "editor": {
+                              "x": 350,
+                              "y": 0
+                            }
                           }
                         ]
                       },
@@ -18073,7 +18868,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -18214,7 +19013,11 @@
                   "height": 28,
                   "text": "AUX temp. (OTP) not installed"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -18285,7 +19088,11 @@
                   "height": 28,
                   "text": "Encoder"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -18390,7 +19197,11 @@
                   "height": 28,
                   "text": "Yes"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -18439,7 +19250,11 @@
                   "height": 28,
                   "text": "Not installed"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -18616,7 +19431,11 @@
                   "height": 57,
                   "text": "Yes"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Select",
@@ -18674,7 +19493,11 @@
                           "height": 57,
                           "text": "Yes"
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     }
                   ]
                 },
@@ -18725,11 +19548,19 @@
                           "height": 57,
                           "text": "Yes"
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "MultilineText",
@@ -18770,7 +19601,11 @@
                   "height": 57,
                   "text": "Yes"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Rectangle",
@@ -18944,7 +19779,11 @@
                   "height": 28,
                   "text": "Yes"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Rectangle",
@@ -19164,7 +20003,11 @@
                         "height": 28,
                         "text": "Pos"
                       }
-                    ]
+                    ],
+                    "editor": {
+                      "x": 350,
+                      "y": 0
+                    }
                   }
                 ]
               },
@@ -19455,7 +20298,11 @@
                           "height": 28,
                           "text": "Yes"
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     },
                     {
                       "type": "Rectangle",
@@ -19725,7 +20572,11 @@
                             }
                           ]
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     },
                     {
                       "type": "Text",
@@ -19784,7 +20635,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Rectangle",
@@ -19917,7 +20772,11 @@
                   "height": 28,
                   "text": "Yes"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Rectangle",
@@ -20088,7 +20947,11 @@
                   "height": 28,
                   "text": "Ethernet settings"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Select",
@@ -20119,7 +20982,11 @@
                   "height": 28,
                   "text": "Channel calibration \\u008c"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -20179,7 +21046,11 @@
                   "height": 28,
                   "text": "Change"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -20314,7 +21185,11 @@
                         "height": 32,
                         "text": "Not calibrated"
                       }
-                    ]
+                    ],
+                    "editor": {
+                      "x": 350,
+                      "y": 0
+                    }
                   }
                 ]
               },
@@ -20505,7 +21380,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Button",
@@ -20654,7 +21533,11 @@
                         "height": 32,
                         "text": "Not calibrated"
                       }
-                    ]
+                    ],
+                    "editor": {
+                      "x": 350,
+                      "y": 0
+                    }
                   }
                 ]
               },
@@ -20800,7 +21683,11 @@
                           "height": 28,
                           "text": "Yes"
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     },
                     {
                       "type": "Rectangle",
@@ -20921,7 +21808,11 @@
                             }
                           ]
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     },
                     {
                       "type": "Text",
@@ -20944,7 +21835,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Rectangle",
@@ -21036,7 +21931,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Button",
@@ -21185,7 +22084,11 @@
                         "height": 32,
                         "text": "Not calibrated"
                       }
-                    ]
+                    ],
+                    "editor": {
+                      "x": 350,
+                      "y": 0
+                    }
                   }
                 ]
               },
@@ -21459,7 +22362,11 @@
                         "height": 32,
                         "text": "Not calibrated"
                       }
-                    ]
+                    ],
+                    "editor": {
+                      "x": 350,
+                      "y": 0
+                    }
                   }
                 ]
               },
@@ -21649,7 +22556,11 @@
                                 "height": 30,
                                 "text": "Disable"
                               }
-                            ]
+                            ],
+                            "editor": {
+                              "x": 350,
+                              "y": 0
+                            }
                           },
                           {
                             "type": "Rectangle",
@@ -21691,7 +22602,11 @@
                           }
                         ]
                       }
-                    ]
+                    ],
+                    "editor": {
+                      "x": 350,
+                      "y": 0
+                    }
                   },
                   {
                     "type": "Rectangle",
@@ -21701,7 +22616,11 @@
                     "width": 290,
                     "height": 65
                   }
-                ]
+                ],
+                "editor": {
+                  "x": 350,
+                  "y": 0
+                }
               },
               "listType": "vertical"
             },
@@ -21944,7 +22863,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -22094,7 +23017,11 @@
                               "height": 28,
                               "text": "Current [0-5A] MIN point"
                             }
-                          ]
+                          ],
+                          "editor": {
+                            "x": 350,
+                            "y": 0
+                          }
                         },
                         {
                           "type": "Select",
@@ -22123,7 +23050,11 @@
                               "height": 28,
                               "text": "Current [0-5A] MID point"
                             }
-                          ]
+                          ],
+                          "editor": {
+                            "x": 350,
+                            "y": 0
+                          }
                         },
                         {
                           "type": "Select",
@@ -22152,7 +23083,11 @@
                               "height": 28,
                               "text": "Current [0-5A] MAX point"
                             }
-                          ]
+                          ],
+                          "editor": {
+                            "x": 350,
+                            "y": 0
+                          }
                         },
                         {
                           "type": "Text",
@@ -22181,7 +23116,11 @@
                           "height": 28,
                           "text": "Current [0-500mA] MAX point"
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     },
                     {
                       "type": "Text",
@@ -22233,7 +23172,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Select",
@@ -22264,7 +23207,11 @@
                   "height": 40,
                   "text": "Text"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Select",
@@ -22297,7 +23244,11 @@
                   "height": 40,
                   "text": "Change"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Button",
@@ -22860,7 +23811,11 @@
                   "height": 42,
                   "text": "ON"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -22908,7 +23863,11 @@
                   "height": 42,
                   "text": "ON"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Rectangle",
@@ -23076,7 +24035,11 @@
                   "height": 28,
                   "text": "Yes"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Rectangle",
@@ -23363,7 +24326,11 @@
                           "height": 28,
                           "text": "Yes"
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     },
                     {
                       "type": "Rectangle",
@@ -23411,7 +24378,11 @@
                     }
                   ]
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Button",
@@ -23568,7 +24539,11 @@
                       "height": 28,
                       "text": "Yes"
                     }
-                  ]
+                  ],
+                  "editor": {
+                    "x": 350,
+                    "y": 0
+                  }
                 },
                 {
                   "type": "Rectangle",
@@ -23743,7 +24718,11 @@
                   "height": 28,
                   "text": "Not installed"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -23802,7 +24781,11 @@
                   "height": 28,
                   "text": "Not installed"
                 }
-              ]
+              ],
+              "editor": {
+                "x": 350,
+                "y": 0
+              }
             },
             {
               "type": "Text",
@@ -24021,7 +25004,11 @@
                         "width": 122,
                         "height": 28
                       }
-                    ]
+                    ],
+                    "editor": {
+                      "x": 350,
+                      "y": 0
+                    }
                   }
                 ]
               },
@@ -24477,9 +25464,17 @@
                                       "height": 32,
                                       "activeStyle": ""
                                     }
-                                  ]
+                                  ],
+                                  "editor": {
+                                    "x": 350,
+                                    "y": 0
+                                  }
                                 }
-                              ]
+                              ],
+                              "editor": {
+                                "x": 350,
+                                "y": 0
+                              }
                             },
                             {
                               "type": "Select",
@@ -24538,7 +25533,11 @@
                                               "height": 30,
                                               "activeStyle": "edit_value_focus_S_right"
                                             }
-                                          ]
+                                          ],
+                                          "editor": {
+                                            "x": 350,
+                                            "y": 0
+                                          }
                                         },
                                         {
                                           "type": "DisplayData",
@@ -24551,7 +25550,11 @@
                                           "height": 30,
                                           "activeStyle": ""
                                         }
-                                      ]
+                                      ],
+                                      "editor": {
+                                        "x": 350,
+                                        "y": 0
+                                      }
                                     },
                                     {
                                       "type": "Select",
@@ -24584,7 +25587,11 @@
                                           "height": 30,
                                           "activeStyle": "edit_value_focus_S_right"
                                         }
-                                      ]
+                                      ],
+                                      "editor": {
+                                        "x": 350,
+                                        "y": 0
+                                      }
                                     }
                                   ]
                                 },
@@ -24601,7 +25608,11 @@
                                   "enabled": "trigger.isManual",
                                   "disabledStyle": "edit_value_S_centered"
                                 }
-                              ]
+                              ],
+                              "editor": {
+                                "x": 350,
+                                "y": 0
+                              }
                             }
                           ]
                         },
@@ -24623,7 +25634,11 @@
                             }
                           ]
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     },
                     "listType": "vertical"
                   }
@@ -24712,9 +25727,17 @@
                                     "height": 32,
                                     "activeStyle": ""
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               }
-                            ]
+                            ],
+                            "editor": {
+                              "x": 350,
+                              "y": 0
+                            }
                           },
                           {
                             "type": "Select",
@@ -24773,7 +25796,11 @@
                                             "height": 30,
                                             "activeStyle": "edit_value_focus_S_right"
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       },
                                       {
                                         "type": "Select",
@@ -24806,9 +25833,17 @@
                                             "height": 30,
                                             "activeStyle": "edit_value_focus_S_right"
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       }
-                                    ]
+                                    ],
+                                    "editor": {
+                                      "x": 350,
+                                      "y": 0
+                                    }
                                   },
                                   {
                                     "type": "Select",
@@ -24850,7 +25885,11 @@
                                             "height": 30,
                                             "activeStyle": "edit_value_focus_S_right"
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       },
                                       {
                                         "type": "Select",
@@ -24883,9 +25922,17 @@
                                             "height": 30,
                                             "activeStyle": "edit_value_focus_S_right"
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       }
-                                    ]
+                                    ],
+                                    "editor": {
+                                      "x": 350,
+                                      "y": 0
+                                    }
                                   }
                                 ]
                               },
@@ -24902,7 +25949,11 @@
                                 "enabled": "trigger.isManual",
                                 "disabledStyle": "edit_value_S_centered"
                               }
-                            ]
+                            ],
+                            "editor": {
+                              "x": 350,
+                              "y": 0
+                            }
                           }
                         ]
                       },
@@ -24914,7 +25965,11 @@
                         "width": 64,
                         "height": 112
                       }
-                    ]
+                    ],
+                    "editor": {
+                      "x": 350,
+                      "y": 0
+                    }
                   },
                   {
                     "type": "Rectangle",
@@ -25036,9 +26091,17 @@
                                     "height": 32,
                                     "activeStyle": ""
                                   }
-                                ]
+                                ],
+                                "editor": {
+                                  "x": 350,
+                                  "y": 0
+                                }
                               }
-                            ]
+                            ],
+                            "editor": {
+                              "x": 350,
+                              "y": 0
+                            }
                           },
                           {
                             "type": "Select",
@@ -25097,7 +26160,11 @@
                                             "height": 30,
                                             "activeStyle": "edit_value_focus_S_right"
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       },
                                       {
                                         "type": "Select",
@@ -25130,9 +26197,17 @@
                                             "height": 30,
                                             "activeStyle": "edit_value_focus_S_right"
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       }
-                                    ]
+                                    ],
+                                    "editor": {
+                                      "x": 350,
+                                      "y": 0
+                                    }
                                   },
                                   {
                                     "type": "Select",
@@ -25174,7 +26249,11 @@
                                             "height": 30,
                                             "activeStyle": "edit_value_focus_S_right"
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       },
                                       {
                                         "type": "Select",
@@ -25207,9 +26286,17 @@
                                             "height": 30,
                                             "activeStyle": "edit_value_focus_S_right"
                                           }
-                                        ]
+                                        ],
+                                        "editor": {
+                                          "x": 350,
+                                          "y": 0
+                                        }
                                       }
-                                    ]
+                                    ],
+                                    "editor": {
+                                      "x": 350,
+                                      "y": 0
+                                    }
                                   }
                                 ]
                               },
@@ -25226,7 +26313,11 @@
                                 "enabled": "trigger.isManual",
                                 "disabledStyle": "edit_value_S_centered"
                               }
-                            ]
+                            ],
+                            "editor": {
+                              "x": 350,
+                              "y": 0
+                            }
                           }
                         ]
                       },
@@ -25238,7 +26329,11 @@
                         "width": 64,
                         "height": 112
                       }
-                    ]
+                    ],
+                    "editor": {
+                      "x": 350,
+                      "y": 0
+                    }
                   },
                   {
                     "type": "Rectangle",
@@ -25388,9 +26483,17 @@
                                       "height": 32,
                                       "activeStyle": ""
                                     }
-                                  ]
+                                  ],
+                                  "editor": {
+                                    "x": 350,
+                                    "y": 0
+                                  }
                                 }
-                              ]
+                              ],
+                              "editor": {
+                                "x": 350,
+                                "y": 0
+                              }
                             },
                             {
                               "type": "Select",
@@ -25440,7 +26543,11 @@
                                           "height": 30,
                                           "activeStyle": "edit_value_focus_S_right"
                                         }
-                                      ]
+                                      ],
+                                      "editor": {
+                                        "x": 350,
+                                        "y": 0
+                                      }
                                     },
                                     {
                                       "type": "Select",
@@ -25473,7 +26580,11 @@
                                           "height": 30,
                                           "activeStyle": "edit_value_focus_S_right"
                                         }
-                                      ]
+                                      ],
+                                      "editor": {
+                                        "x": 350,
+                                        "y": 0
+                                      }
                                     }
                                   ]
                                 },
@@ -25490,7 +26601,11 @@
                                   "enabled": "trigger.isManual",
                                   "disabledStyle": "edit_value_S_centered"
                                 }
-                              ]
+                              ],
+                              "editor": {
+                                "x": 350,
+                                "y": 0
+                              }
                             }
                           ]
                         },
@@ -25512,13 +26627,21 @@
                             }
                           ]
                         }
-                      ]
+                      ],
+                      "editor": {
+                        "x": 350,
+                        "y": 0
+                      }
                     },
                     "listType": "vertical"
                   }
                 ]
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           }
         ]
       },
@@ -25638,7 +26761,11 @@
                       "height": 28,
                       "text": "On"
                     }
-                  ]
+                  ],
+                  "editor": {
+                    "x": 350,
+                    "y": 0
+                  }
                 },
                 {
                   "type": "DisplayData",
@@ -25734,9 +26861,17 @@
                     "width": 155,
                     "height": 86
                   }
-                ]
+                ],
+                "editor": {
+                  "x": 350,
+                  "y": 0
+                }
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Select",
@@ -25767,7 +26902,11 @@
                 "height": 24,
                 "text": "LRip"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Select",
@@ -25808,7 +26947,11 @@
                 "height": 24,
                 "text": "OCP"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Select",
@@ -25849,7 +26992,11 @@
                 "height": 24,
                 "text": "OVP"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Select",
@@ -25890,7 +27037,11 @@
                 "height": 24,
                 "text": "OTP"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Select",
@@ -25931,7 +27082,11 @@
                 "height": 24,
                 "text": "OPP"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Select",
@@ -25990,7 +27145,11 @@
                             "height": 40,
                             "activeStyle": "mon_value_focus"
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       },
                       {
                         "type": "Select",
@@ -26023,9 +27182,17 @@
                             "height": 40,
                             "activeStyle": "set_value_focus_balanced"
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       }
-                    ]
+                    ],
+                    "editor": {
+                      "x": 350,
+                      "y": 0
+                    }
                   },
                   {
                     "type": "Select",
@@ -26067,7 +27234,11 @@
                             "height": 40,
                             "activeStyle": "mon_value_focus"
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       },
                       {
                         "type": "Select",
@@ -26100,9 +27271,17 @@
                             "height": 40,
                             "activeStyle": "set_value_focus_balanced"
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       }
-                    ]
+                    ],
+                    "editor": {
+                      "x": 350,
+                      "y": 0
+                    }
                   }
                 ]
               },
@@ -26119,7 +27298,11 @@
                 "enabled": "trigger.isManual",
                 "disabledStyle": "default"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Rectangle",
@@ -26316,9 +27499,17 @@
                       }
                     ]
                   }
-                ]
+                ],
+                "editor": {
+                  "x": 350,
+                  "y": 0
+                }
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Select",
@@ -26377,7 +27568,11 @@
                             "height": 36,
                             "activeStyle": "mon_value_focus"
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       },
                       {
                         "type": "Select",
@@ -26410,9 +27605,17 @@
                             "height": 36,
                             "activeStyle": "set_value_focus_balanced"
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       }
-                    ]
+                    ],
+                    "editor": {
+                      "x": 350,
+                      "y": 0
+                    }
                   },
                   {
                     "type": "Select",
@@ -26454,7 +27657,11 @@
                             "height": 36,
                             "activeStyle": "mon_value_focus"
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       },
                       {
                         "type": "Select",
@@ -26487,9 +27694,17 @@
                             "height": 36,
                             "activeStyle": "set_value_focus_balanced"
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       }
-                    ]
+                    ],
+                    "editor": {
+                      "x": 350,
+                      "y": 0
+                    }
                   }
                 ]
               },
@@ -26506,7 +27721,11 @@
                 "enabled": "trigger.isManual",
                 "disabledStyle": "default"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "DisplayData",
@@ -26546,7 +27765,11 @@
                 "height": 24,
                 "text": "LRip"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Select",
@@ -26587,7 +27810,11 @@
                 "height": 24,
                 "text": "OCP"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Select",
@@ -26628,7 +27855,11 @@
                 "height": 24,
                 "text": "OVP"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Select",
@@ -26669,7 +27900,11 @@
                 "height": 24,
                 "text": "OTP"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Select",
@@ -26710,7 +27945,11 @@
                 "height": 24,
                 "text": "OPP"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Text",
@@ -26882,9 +28121,17 @@
                       }
                     ]
                   }
-                ]
+                ],
+                "editor": {
+                  "x": 350,
+                  "y": 0
+                }
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Select",
@@ -26915,7 +28162,11 @@
                 "height": 24,
                 "text": "LRip"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Select",
@@ -26956,7 +28207,11 @@
                 "height": 24,
                 "text": "OCP"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Select",
@@ -26997,7 +28252,11 @@
                 "height": 24,
                 "text": "OVP"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Select",
@@ -27038,7 +28297,11 @@
                 "height": 24,
                 "text": "OTP"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Select",
@@ -27079,7 +28342,11 @@
                 "height": 24,
                 "text": "OPP"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Rectangle",
@@ -27154,7 +28421,11 @@
                             "height": 36,
                             "activeStyle": "mon_value_focus"
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       },
                       {
                         "type": "Select",
@@ -27187,9 +28458,17 @@
                             "height": 36,
                             "activeStyle": "set_value_focus_balanced"
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       }
-                    ]
+                    ],
+                    "editor": {
+                      "x": 350,
+                      "y": 0
+                    }
                   },
                   {
                     "type": "Select",
@@ -27231,7 +28510,11 @@
                             "height": 36,
                             "activeStyle": "mon_value_focus"
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       },
                       {
                         "type": "Select",
@@ -27264,9 +28547,17 @@
                             "height": 36,
                             "activeStyle": "set_value_focus_balanced"
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       }
-                    ]
+                    ],
+                    "editor": {
+                      "x": 350,
+                      "y": 0
+                    }
                   }
                 ]
               },
@@ -27283,7 +28574,11 @@
                 "enabled": "trigger.isManual",
                 "disabledStyle": "default"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "DisplayData",
@@ -27390,9 +28685,17 @@
                     "y2Data": "channel.displayValue2",
                     "y2Style": "yt_graph_unregulated"
                   }
-                ]
+                ],
+                "editor": {
+                  "x": 350,
+                  "y": 0
+                }
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Select",
@@ -27451,7 +28754,11 @@
                             "height": 36,
                             "activeStyle": "mon_value_focus"
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       },
                       {
                         "type": "Select",
@@ -27484,9 +28791,17 @@
                             "height": 36,
                             "activeStyle": "set_value_focus_balanced"
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       }
-                    ]
+                    ],
+                    "editor": {
+                      "x": 350,
+                      "y": 0
+                    }
                   },
                   {
                     "type": "Select",
@@ -27528,7 +28843,11 @@
                             "height": 36,
                             "activeStyle": "mon_value_focus"
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       },
                       {
                         "type": "Select",
@@ -27561,9 +28880,17 @@
                             "height": 36,
                             "activeStyle": "set_value_focus_balanced"
                           }
-                        ]
+                        ],
+                        "editor": {
+                          "x": 350,
+                          "y": 0
+                        }
                       }
-                    ]
+                    ],
+                    "editor": {
+                      "x": 350,
+                      "y": 0
+                    }
                   }
                 ]
               },
@@ -27580,7 +28907,11 @@
                 "enabled": "trigger.isManual",
                 "disabledStyle": "default"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "DisplayData",
@@ -27620,7 +28951,11 @@
                 "height": 24,
                 "text": "LRip"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Select",
@@ -27661,7 +28996,11 @@
                 "height": 24,
                 "text": "OCP"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Select",
@@ -27702,7 +29041,11 @@
                 "height": 24,
                 "text": "OVP"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Select",
@@ -27743,7 +29086,11 @@
                 "height": 24,
                 "text": "OTP"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Select",
@@ -27784,7 +29131,11 @@
                 "height": 24,
                 "text": "OPP"
               }
-            ]
+            ],
+            "editor": {
+              "x": 350,
+              "y": 0
+            }
           },
           {
             "type": "Text",
@@ -75769,13 +77120,17 @@
     ],
     "bitmaps": [
       {
+        "imageElementLoading": false,
         "name": "logo",
         "image": "data:image/png;base64,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",
-        "style": "default"
+        "style": "default",
+        "_imageElement": null
       },
       {
+        "imageElementLoading": false,
         "name": "bp_coupled",
-        "image": "data:image/png;base64,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"
+        "image": "data:image/png;base64,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",
+        "_imageElement": null
       }
     ]
   },
