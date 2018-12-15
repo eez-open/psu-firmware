@@ -787,7 +787,7 @@ void action_ntp_edit_server() {
 }
 
 
-ACTION actions[] = {
+ActionExecFunc g_actionExecFunctions[] = {
     0,
     action_channel_toggle_output,
     action_edit,

@@ -100,7 +100,7 @@ void ChSettingsAdvLRipplePage::set() {
 
 		profile::save();
 	
-		infoMessageP(PSTR("LRipple params changed!"), actions[ACTION_ID_SHOW_CH_SETTINGS_ADV]);
+		infoMessageP(PSTR("LRipple params changed!"), g_actionExecFunctions[ACTION_ID_SHOW_CH_SETTINGS_ADV]);
 	}
 }
 
@@ -312,7 +312,7 @@ void ChSettingsAdvViewPage::set() {
 	if (getDirty()) {
         channel_dispatcher::setDisplayViewSettings(*g_channel, displayValue1, displayValue2, ytViewRate);
 		profile::save();
-		infoMessageP(PSTR("View settings changed!"), actions[ACTION_ID_SHOW_CH_SETTINGS_ADV]);
+		infoMessageP(PSTR("View settings changed!"), g_actionExecFunctions[ACTION_ID_SHOW_CH_SETTINGS_ADV]);
 	}
 }
 

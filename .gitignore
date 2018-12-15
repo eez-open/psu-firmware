@@ -12,3 +12,4 @@ psu.eez-project-ui-state
 lib/readme.txt
 .clang_complete
 .gcc-flags.json
+psu-extensions.eez-project-ui-state

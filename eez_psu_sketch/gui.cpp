@@ -213,7 +213,7 @@ bool isActivePageInternal() {
 ////////////////////////////////////////////////////////////////////////////////
 
 void executeAction(int actionId) {
-    actions[actionId]();
+	g_actionExecFunctions[actionId]();
     sound::playClick();
 }
 

@@ -201,9 +201,7 @@ enum ActionsEnum {
     ACTION_ID_NTP_EDIT_SERVER
 };
 
-typedef void (*ACTION)();
-
-extern ACTION actions[];
+extern ActionExecFunc g_actionExecFunctions[];
 
 }
 } // namespace eez::psu

@@ -491,7 +491,7 @@ extern const uint8_t *fonts[];
 struct Bitmap {
     uint16_t w;
     uint16_t h;
-    const uint8_t *pixels PROGMEM;
+    const uint8_t *pixels;
 };
 
 extern Bitmap bitmaps[];

@@ -126,6 +126,8 @@ extern bool g_rprogAlarm;
 
 bool isFrontPanelLocked();
 
+typedef void(*ActionExecFunc)();
+
 }
 } // namespace eez::psu
 
