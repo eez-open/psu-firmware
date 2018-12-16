@@ -130,7 +130,7 @@
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 41%;">
-					<p class="scpi2"><a href="#mmem_down_data"><span style="text-decoration: underline;">:DATA {#&lt;length-digits&gt;&lt;length&gt;&lt;block&gt;}</span></a></p>
+					<p class="scpi2"><a href="#mmem_down_data"><span style="text-decoration: underline;">:DATA {&lt;block&gt;}</span></a></p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 59%;">
 					<p>Downloads data from the host computer</p>
@@ -341,7 +341,7 @@
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
 					<p class="cmd_code">MMEM:CAT?</p>
-					<p class="cmd_code_Start">&quot;USER,FOLD,0&quot;,&quot;SCPI.PDF,BIN,1274844&quot;,&quot;SCH5B13A.PDF,BIN,296589&quot;,&quot;Documents,FOLD,0&quot;,&quot;Lists,FOLD,0&quot;,&quot;Videos,FOLD,0&quot;,&quot;profile0.profile,PROF,264&quot;</p>
+					<p class="cmd_code_Start">&quot;USER,FOLD,0&quot;,&quot;SCPI.PDF,BIN,1274844&quot;,&quot;SCH5B13A.PDF,BIN,296589&quot;,<br>&quot;Documents,FOLD,0&quot;,&quot;Lists,FOLD,0&quot;,&quot;Videos,FOLD,0&quot;,<br>&quot;profile0.profile,PROF,264&quot;</p>
 					<p class="cmd_code">&#160;</p>
 					<p class="cmd_code">MMEM:CAT? &quot;USER&quot;</p>
 					<p class="cmd_code_Start">&quot;LST_2_3.CSV,BIN,88&quot;,&quot;FERY2.PDF,BIN,2443&quot;</p>
@@ -860,7 +860,7 @@
 				</td>
 			</tr>
 			<tr style="background: transparent;">
-				<td rowspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
+				<td rowspan="2" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 13%;">
 					<p>Parameters</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 16%;">
@@ -878,41 +878,13 @@
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
-					<p>&lt;length-digits&gt;</p>
-				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 19%;">
-					<p style="text-align: center;">Numeric (NR1)</p>
-				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 35%;">
-					<p>&lt;length&gt; number of digits (e.g. 2 for two digit number)</p>
-				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 18%;">
-					<p style="text-align: center;">–</p>
-				</td>
-			</tr>
-			<tr style="background: transparent;">
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
-					<p>&lt;length&gt;</p>
-				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 19%;">
-					<p style="text-align: center;">Numeric (NR1)</p>
-				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 35%;">
-					<p>Limited only with available space on SD card</p>
-				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 18%;">
-					<p style="text-align: center;">–</p>
-				</td>
-			</tr>
-			<tr style="background: transparent;">
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
 					<p>&lt;block&gt;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 19%;">
-					<p style="text-align: center;">Discrete</p>
+					<p style="text-align: center;">Data block</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 35%;">
-					<p style="text-align: left;">Only exact size is allowed as defined with &lt;length&gt;</p>
+					<p style="text-align: center;">–</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 18%;">
 					<p style="text-align: center;">–</p>
@@ -1064,7 +1036,7 @@
 					<p>&lt;filesize&gt;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 18%;">
-					<p style="text-align: center;">Numeric (NR1)</p>
+					<p style="text-align: center;">NR1</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
 					<p>0 to 2.147.483.648 (2&#160;GiB) as limited by SD Card FAT</p>

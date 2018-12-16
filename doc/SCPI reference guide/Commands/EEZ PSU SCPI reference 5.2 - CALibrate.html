@@ -58,7 +58,7 @@
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
-					<p class="scpi0"><a href="#cal_mode"><span style="text-decoration: underline;">CALibration[:MODE] {&lt;bool&gt;, &lt;password&gt;}</span></a></p>
+					<p class="scpi0"><a href="#cal_mode"><span style="text-decoration: underline;">CALibration[:MODE] {&lt;bool&gt;}, {&lt;password&gt;}</span></a></p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
 					<p>Enables/disables calibration mode</p>
@@ -114,7 +114,7 @@
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
-					<p class="scpi2"><a href="#cal_pass_new"><span style="text-decoration: underline;">:NEW {&lt;old&gt;, &lt;new&gt;}</span></a></p>
+					<p class="scpi2"><a href="#cal_pass_new"><span style="text-decoration: underline;">:NEW {&lt;old&gt;}, {&lt;new&gt;}</span></a></p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
 					<p>Changes calibration password</p>
@@ -146,7 +146,7 @@
 			</tr>
 			<tr style="background: transparent;">
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 46%;">
-					<p class="scpi1"><a href="#cal_stat"><span style="text-decoration: underline;">:STATe {&lt;bool&gt;, &lt;password&gt;}</span></a></p>
+					<p class="scpi1"><a href="#cal_stat"><span style="text-decoration: underline;">:STATe {&lt;bool&gt;}, {&lt;password&gt;}</span></a></p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 54%;">
 					<p>Enables calibration parameters</p>
@@ -184,7 +184,7 @@
 					<p>Syntax</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_root">CALibration[:MODE] {&lt;bool&gt; &lt;password&gt;}</p>
+					<p class="cmd_root">CALibration[:MODE] {&lt;bool&gt;}, {&lt;password&gt;}</p>
 					<p class="cmd_root">CALibration[:MODE]?</p>
 				</td>
 			</tr>
@@ -221,7 +221,7 @@
 					<p>&lt;bool&gt;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 21%;">
-					<p style="text-align: center;">Discrete</p>
+					<p style="text-align: center;">Boolean</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 21%;">
 					<p style="text-align: center;">ON|OFF|0|1</p>
@@ -415,7 +415,7 @@
 					<p>&lt;new value&gt;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 20%;">
-					<p style="text-align: center;">numeric (NR2)</p>
+					<p style="text-align: center;">NR2</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 32%;">
 					<p style="text-align: left;">-0.2A to MAX + 0.2A</p>
@@ -581,7 +581,7 @@
 					<p>&lt;range&gt;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 18%;">
-					<p style="text-align: center;">Discrete</p>
+					<p style="text-align: center;">Discrete|NR2</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 20%;">
 					<p>HIGH|LOW|5|0.5</p>
@@ -633,7 +633,7 @@
 					<p>Syntax</p>
 				</td>
 				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 87%;">
-					<p class="cmd_root">CALibration:PASSword:NEW {&lt;old&gt;, &lt;new&gt;}</p>
+					<p class="cmd_root">CALibration:PASSword:NEW {&lt;old&gt;}, {&lt;new&gt;}</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -938,7 +938,7 @@
 					<p>&lt;bool&gt;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 21%;">
-					<p style="text-align: center;">Discrete</p>
+					<p style="text-align: center;">Boolean</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 21%;">
 					<p style="text-align: center;">OFF|ON|0|1</p>
@@ -1020,7 +1020,7 @@
 					<p>&lt;new value&gt;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 21%;">
-					<p style="text-align: center;">numeric (NR2)</p>
+					<p style="text-align: center;">NR2</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 31%;">
 					<p style="text-align: left;">-0.5V to MAX + 0.5V</p>

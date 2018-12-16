@@ -10,6 +10,7 @@
 			li { list-style-position: outside; }
 			
 			/* Paragraphs and texts */
+			.Default_ntt { }
 			.Heading_1 { margin-top: 4.23mm; margin-bottom: 2.12mm; font-size: 14.0pt; font-weight: bold; color: #0066cc; }
 			.Heading_2 { margin-left: 7.62mm; margin-top: 4.5mm; margin-bottom: 2.5mm; text-indent: -7.62mm; font-size: 12.0pt; font-weight: bold; font-style: italic; color: #0066cc; }
 			.Heading_3 { margin-left: 7.62mm; margin-top: 4.5mm; margin-bottom: 2.5mm; text-indent: -7.62mm; font-size: 11.0pt; font-weight: bold; color: #0066cc; }
@@ -19,6 +20,7 @@
 			p { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
 			li { text-align: justify; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; text-indent: 0; background: transparent; font-family: "Arial"; font-size: 10.5pt; font-weight: normal; font-style: normal; }
 			.Text_body { margin-bottom: 2.12mm; }
+			.cmd_code { text-align: left; font-family: "Courier New"; }
 			.cmd_code_End { text-align: left; margin-bottom: 1.99mm; font-family: "Courier New"; }
 			.cmd_code_Start { text-align: left; margin-top: 1.99mm; font-family: "Courier New"; }
 			.cmd_code_single { text-align: left; margin-top: 1.99mm; margin-bottom: 1.99mm; font-family: "Courier New"; }
@@ -391,41 +393,90 @@
 		<p class="Heading_2">2.10. SCPI parameter types</p>
 		<p>The SCPI language defines several different data formats to be used in program messages and response messages:</p>
 		<p>&#160;</p>
-		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 169.92mm;">
 			<tr style="background: transparent;">
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 9%;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 14%;">
 					<p>Numeric</p>
 				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 91%;">
+				<td colspan="3" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 86%;">
 					<p>Commands that require numeric parameters will accept all commonly used representations of numbers like integer (also known as NR1 format specified in ANSI X3.42-1990) or decimal representations of numbers including optional signs, decimal points (NR2 format), and scientific notation (i.e. 10E3 or NR3 format). Special values for numeric parameters like MINimum, MAXimum, and DEFault are also accepted. You can also send engineering unit suffixes (V, A, or SEC) with numeric parameters. If only specific numeric values are accepted, the PSU will automatically round the input numeric parameters. The following command uses a numeric parameter:</p>
 					<p class="cmd_code_single">VOLT:STEP {&lt;step&gt;}</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 9%;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 14%;">
 					<p>Discrete</p>
 				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 91%;">
+				<td colspan="3" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 86%;">
 					<p>Used to program settings that have a limited number of values such as BUS and IMM or CH1 and CH2. Query responses will always return the short form in all uppercase letters. The following command uses discrete parameters:</p>
 					<p class="cmd_code_single">CAL:CURR:LEV {MIN|MID|MAX}</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 9%;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 14%;">
 					<p>Boolean</p>
 				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 91%;">
+				<td colspan="3" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 86%;">
 					<p>Represent a single binary condition that is either true or false. For a false condition, the PSU will accept OFF or 0. For a true condition, the PSU will accept ON or any nonzero value (i.e. 1 but also 2.34 or -3). When you query a Boolean setting, the PSU will always return 0 or 1. The following command uses a Boolean parameter:</p>
 					<p class="cmd_code_single">OUTP {OFF|ON}</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 9%;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 14%;">
 					<p>String </p>
 				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 91%;">
+				<td colspan="3" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 86%;">
 					<p>Can contain virtually any set of ASCII characters. A string must begin and end with matching quotes, either with a single quote or with a double quote. You can include the quote delimiter as part of the string by typing it twice without any characters in between. The following command uses a string parameter:</p>
 					<p class="cmd_code_single">CAL:REM &lt;quoted string&gt;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td rowspan="5" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 14%;">
+					<p>Data block</p>
+				</td>
+				<td colspan="3" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 86%;">
+					<p>#&lt;length-digits&gt;&lt;length&gt;&lt;block&gt;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 17%;">
+					<p>&lt;length-digits&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 19%;">
+					<p style="text-align: center;">NR1</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
+					<p>&lt;length&gt; number of digits (e.g. 2 for two digit number)</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 17%;">
+					<p>&lt;length&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 19%;">
+					<p style="text-align: center;">NR1</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
+					<p>Limited only with available space on SD card</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 17%;">
+					<p>&lt;block&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 19%;">
+					<p style="text-align: center;">Discrete</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 51%;">
+					<p style="text-align: left;">Only exact size is allowed as defined with &lt;length&gt;</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td colspan="3" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 86%;">
+					<p class="Default_ntt">Downloads text <span style="font-style: italic;">Hello world</span> and store into the file &quot;test file&quot; in the current directory. Digit 2  denotes two digits of data length (11).</p>
+					<p class="cmd_code_Start">MMEM:DOWN:FNAM &quot;test file&quot;</p>
+					<p class="cmd_code">MMEM:DOWN:DATA <span style="font-weight: bold;">#211Hello world</span></p>
+					<p class="cmd_code">MMEM:DOWN:FNAM &quot;&quot;</p>
 				</td>
 			</tr>
 		</table>
