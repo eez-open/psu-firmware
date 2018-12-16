@@ -254,13 +254,13 @@
 					<p>&lt;value&gt;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 20%;">
-					<p style="text-align: center;">Numeric</p>
+					<p style="text-align: center;">NR1</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 36%;">
 					<p>0 – 255 (A decimal value which corresponds to the binary-weighted sum of the bits in the register. See also table in <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-registers-and-queues.html#std_even_stat_reg"><span style="text-decoration: underline;">Section 3.1</span></a>).</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 18%;">
-					<p style="text-align: center;">None</p>
+					<p style="text-align: center;">–</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -468,13 +468,13 @@
 					<p>&lt;profile&gt;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 21%;">
-					<p style="text-align: center;">Numeric</p>
+					<p style="text-align: center;">NR1</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 24%;">
 					<p style="text-align: center;">0 – 9 </p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 18%;">
-					<p style="text-align: center;">None</p>
+					<p style="text-align: center;">–</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -636,13 +636,13 @@
 					<p>&lt;profile&gt;</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 21%;">
-					<p style="text-align: center;">Numeric</p>
+					<p style="text-align: center;">NR1</p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 21%;">
 					<p style="text-align: center;">1 – 9 </p>
 				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 21%;">
-					<p style="text-align: center;">None</p>
+					<p style="text-align: center;">–</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
@@ -675,45 +675,79 @@
 			</tr>
 		</table>
 		<p class="Heading_2">4.9. <a name="sre"></a>*SRE</p>
-		<table style="border-collapse: collapse; background: transparent; width: 175.02mm;">
+		<table style="border-collapse: collapse; background: transparent; width: 170mm;">
 			<tr style="background: transparent;">
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
 					<p class="Default_ntt">Syntax</p>
 				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
 					<p class="cmd_root">*SRE {&lt;value&gt;}</p>
 					<p class="cmd_root">*SRE?</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
 					<p class="Default_ntt">Description</p>
 				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
 					<p>Enable bits in the Status Byte enable register (see <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-registers-and-queues.html#stat_byte_reg"><span style="text-decoration: underline;">Section 3.2</span></a>).</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
+					<p class="Default_ntt">Parameters</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 18%;">
+					<p style="text-align: center;">Name</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 19%;">
+					<p style="text-align: center;">Type</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 32%;">
+					<p style="text-align: center;">Range</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 1px solid #000000; vertical-align: top; background: transparent; width: 16%;">
+					<p style="text-align: center;">Default</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
+					<p>&#160;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 18%;">
+					<p>&lt;value&gt;</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 19%;">
+					<p style="text-align: center;">NR1</p>
+				</td>
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 32%;">
+					<p>0 – 255 (A decimal value which corresponds to the binary-weighted sum of the bits in the register. See also table in <a href="http://www.envox.hr/eez/bench-power-supply/psu-scpi-reference-manual/psu-scpi-registers-and-queues.html#std_even_stat_reg"><span style="text-decoration: underline;">Section 3.1</span></a>).</p>
+				</td>
 				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+					<p style="text-align: center;">–</p>
+				</td>
+			</tr>
+			<tr style="background: transparent;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
 					<p class="Default_ntt">Return</p>
 				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
 					<p>Query the Status Byte enable register. The PSU returns a decimal value which corresponds to the binary-weighted sum of all bits set in the enable register.</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
 					<p class="Default_ntt">Usage<span style="font-style: italic;"> </span>example</p>
 				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
 					<p class="cmd_code">*SRE 32</p>
 				</td>
 			</tr>
 			<tr style="background: transparent;">
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 16%;">
+				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 15%;">
 					<p class="Default_ntt">Related Commands</p>
 				</td>
-				<td style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
+				<td colspan="4" style="border-left: 0; border-right: 0; border-top: 0; border-bottom: 0; vertical-align: top; background: transparent; width: 85%;">
 					<p>*STB</p>
 				</td>
 			</tr>
