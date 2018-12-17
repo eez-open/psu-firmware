@@ -113,17 +113,23 @@
             "name": "*CLS",
             "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#cls",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "*ESE",
             "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#ese",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "value",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "*ESE?",
@@ -146,56 +152,76 @@
             "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#idn",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "arbitrary-ascii"
             }
           },
           {
             "name": "*OPC",
             "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#opc",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "*OPC?",
             "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#opc",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "*RCL",
             "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#rcl",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "profile",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "*RST",
             "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#rst",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "*SAV",
             "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#sav",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "profile",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "*SRE",
             "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#sre",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "value",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "*SRE?",
@@ -217,25 +243,21 @@
             "name": "*TRG",
             "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#trg",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "*TST?",
             "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#tst",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "*WAI",
             "helpLink": "EEZ PSU SCPI reference 4 - common comand reference.html#wai",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           }
         ]
       },
@@ -247,17 +269,13 @@
             "name": "ABORt",
             "helpLink": "EEZ PSU SCPI reference 5.1 - ABORt.html#abor",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "ABORt:DLOG",
             "helpLink": "EEZ PSU SCPI reference 5.1 - ABORt.html#abor_dlog",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           }
         ]
       },
@@ -268,122 +286,222 @@
           {
             "name": "CALibration:CLEar",
             "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_cle",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "password",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "CALibration:CURRent:LEVel",
             "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_curr_lev",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "level",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Level"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "CALibration:CURRent:RANGe",
             "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_curr_rang",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "range",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Range1"
+                  },
+                  {
+                    "type": "nr2"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "CALibration:CURRent[:DATA]",
             "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_curr",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "new value",
+                "type": [
+                  {
+                    "type": "nr2"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "CALibration:PASSword:NEW",
             "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_pass_new",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "old",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "new",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "CALibration:REMark",
             "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_rem",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "user remark",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "CALibration:REMark?",
             "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_rem",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "quoted-string"
             }
           },
           {
             "name": "CALibration:SAVE",
             "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_save",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "CALibration:STATe",
             "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_stat",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "CALibration:STATe?",
             "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_stat",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "CALibration:VOLTage:LEVel",
             "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_volt_lev",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "level",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Level"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "CALibration:VOLTage[:DATA]",
             "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_volt",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "new value",
+                "type": [
+                  {
+                    "type": "nr2"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "CALibration[:MODE]",
             "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_mode",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "password",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "CALibration[:MODE]?",
             "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_mode",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "CALibration:SCReen:INIT",
             "helpLink": "EEZ PSU SCPI reference 5.2 - CALibrate.html#cal_scr",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           }
         ]
       },
@@ -394,17 +512,39 @@
           {
             "name": "DIAGnostic[:INFOrmation]:ADC?",
             "helpLink": "EEZ PSU SCPI reference 5.3 - DIAGnostic.html#diag_adc",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "list-of-quoted-string"
             }
           },
           {
             "name": "DIAGnostic[:INFOrmation]:CALibration?",
             "helpLink": "EEZ PSU SCPI reference 5.3 - DIAGnostic.html#diag_cal",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "list-of-quoted-string"
             }
           },
           {
@@ -420,7 +560,7 @@
             "helpLink": "EEZ PSU SCPI reference 5.3 - DIAGnostic.html#diag_prot",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "list-of-quoted-string"
             }
           },
           {
@@ -428,7 +568,7 @@
             "helpLink": "EEZ PSU SCPI reference 5.3 - DIAGnostic.html#diag_test",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "list-of-quoted-string"
             }
           }
         ]
@@ -440,10 +580,18 @@
           {
             "name": "DISPlay:BRIGhtness",
             "helpLink": "EEZ PSU SCPI reference 5.4 - DISPlay.html#disp_brig",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "value",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "DISPlay:BRIGhtness?",
@@ -456,10 +604,22 @@
           {
             "name": "DISPlay:VIEW",
             "helpLink": "EEZ PSU SCPI reference 5.4 - DISPlay.html#disp_view",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "mode",
+                "type": [
+                  {
+                    "type": "nr1"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "Mode"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "DISPlay:VIEW?",
@@ -472,41 +632,55 @@
           {
             "name": "DISPlay[:WINdow]:TEXT",
             "helpLink": "EEZ PSU SCPI reference 5.4 - DISPlay.html#disp_text",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "text message",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "DISPlay[:WINdow]:TEXT:CLEar",
             "helpLink": "EEZ PSU SCPI reference 5.4 - DISPlay.html#disp_text_cle",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "DISPlay[:WINdow]:TEXT?",
             "helpLink": "EEZ PSU SCPI reference 5.4 - DISPlay.html#disp_text",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "quoted-string"
             }
           },
           {
             "name": "DISPlay[:WINdow][:STATe]",
             "helpLink": "EEZ PSU SCPI reference 5.4 - DISPlay.html#disp_stat",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "DISPlay[:WINdow][:STATe]?",
             "helpLink": "EEZ PSU SCPI reference 5.4 - DISPlay.html#disp_stat",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           }
         ]
@@ -523,34 +697,48 @@
           {
             "name": "INITiate:CONTinuous",
             "helpLink": "EEZ PSU SCPI reference 5.6 - INITiate.html#init_cont",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "INITiate:CONTinuous?",
             "helpLink": "EEZ PSU SCPI reference 5.6 - INITiate.html#init_cont",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "INITiate[:IMMediate]",
             "helpLink": "EEZ PSU SCPI reference 5.6 - INITiate.html#init",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "INITiate:DLOG",
             "helpLink": "EEZ PSU SCPI reference 5.6 - INITiate.html#init_dlog",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "filename",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           }
         ]
       },
@@ -561,50 +749,75 @@
           {
             "name": "INSTrument:COUPle:TRACking",
             "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_coup",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "type",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Type"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "INSTrument:COUPle:TRACking?",
             "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_coup",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
             "name": "INSTrument:DISPlay:TRACe:SWAP",
             "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_disp_trac_swap",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "INSTrument:DISPlay:TRACe[<n>]",
             "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_disp_trac",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "value",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Value"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "INSTrument:DISPlay:TRACe[<n>]?",
             "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_disp_trac",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "discrete",
+              "enumeration": "Value"
             }
           },
           {
             "name": "INSTrument:DISPlay:YT:RATE",
             "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_disp_yt_rate",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "duration",
+                "type": [
+                  {
+                    "type": "nr2"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "INSTrument:DISPlay:YT:RATE?",
@@ -617,10 +830,18 @@
           {
             "name": "INSTrument:NSELect",
             "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_nsel",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "INSTrument:NSELect?",
@@ -633,17 +854,27 @@
           {
             "name": "INSTrument[:SELect]",
             "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_sel",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "INSTrument[:SELect]?",
             "helpLink": "EEZ PSU SCPI reference 5.7 - INSTrument.html#inst_sel",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "discrete",
+              "enumeration": "Channel"
             }
           }
         ]
@@ -655,33 +886,78 @@
           {
             "name": "MEASure[:SCALar]:CURRent[:DC]?",
             "helpLink": "EEZ PSU SCPI reference 5.8 - MEASure.html#meas_curr",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
             "name": "MEASure[:SCALar]:POWer[:DC]?",
             "helpLink": "EEZ PSU SCPI reference 5.8 - MEASure.html#meas_pow",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
             "name": "MEASure[:SCALar]:TEMPerature[:THERmistor][:DC]?",
             "helpLink": "EEZ PSU SCPI reference 5.8 - MEASure.html#meas_temp",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "sensor",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Sensor"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "nr2",
+              "enumeration": ""
             }
           },
           {
             "name": "MEASure[:SCALar][:VOLTage][:DC]?",
             "helpLink": "EEZ PSU SCPI reference 5.8 - MEASure.html#meas_volt",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           }
         ]
@@ -703,64 +979,113 @@
             "helpLink": "EEZ PSU SCPI reference 5.9 - MEMory.html#mem_stat_cat",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "list-of-quoted-string"
             }
           },
           {
             "name": "MEMory:STATe:DELete",
             "helpLink": "EEZ PSU SCPI reference 5.9 - MEMory.html#mem_stat_del",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "profile",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "MEMory:STATe:DELete:ALL",
             "helpLink": "EEZ PSU SCPI reference 5.9 - MEMory.html#mem_stat_del",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "MEMory:STATe:NAME",
             "helpLink": "EEZ PSU SCPI reference 5.9 - MEMory.html#mem_stat_name",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "profile",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "name",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "MEMory:STATe:NAME?",
             "helpLink": "EEZ PSU SCPI reference 5.9 - MEMory.html#mem_stat_name",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "profile",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "quoted-string"
             }
           },
           {
             "name": "MEMory:STATe:RECall:AUTO",
             "helpLink": "EEZ PSU SCPI reference 5.9 - MEMory.html#mem_stat_rec_auto",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "MEMory:STATe:RECall:AUTO?",
             "helpLink": "EEZ PSU SCPI reference 5.9 - MEMory.html#mem_stat_rec_auto",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "MEMory:STATe:RECall:SELect",
             "helpLink": "EEZ PSU SCPI reference 5.9 - MEMory.html#mem_stat_rec_sel",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "profile",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "MEMory:STATe:RECall:SELect?",
@@ -773,9 +1098,19 @@
           {
             "name": "MEMory:STATe:VALid?",
             "helpLink": "EEZ PSU SCPI reference 5.9 - MEMory.html#mem_stat_val",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "profile",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           }
         ]
@@ -787,15 +1122,35 @@
           {
             "name": "MMEMory:CATalog?",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_cat",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "directory",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "list-of-quoted-string"
             }
           },
           {
             "name": "MMEMory:CATalog:LENgth?",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_cat_len",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "directory",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
               "type": "nr1"
             }
@@ -803,153 +1158,303 @@
           {
             "name": "MMEMory:CDIRectory",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_cdir",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "directory",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "MMEMory:CDIRectory?",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_cdir",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "quoted-string"
             }
           },
           {
             "name": "MMEMory:COPY",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_copy",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "source",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "destination",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "MMEMory:DATE?",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_date",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "filename",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "arbitrary-ascii"
             }
           },
           {
             "name": "MMEMory:DELete",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_del",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "filename",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "MMEMory:DOWNload:DATA",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_down_data",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "block",
+                "type": [
+                  {
+                    "type": "data-block"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "MMEMory:DOWNload:FNAMe",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_down_fnam",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "filename",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "MMEMory:DOWNload:SIZE",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_down_size",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "filesize",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "MMEMory:DOWNload:ABORt",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_abor",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "MMEMory:LOAD:LIST<n>",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_load_list",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "filename",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "MMEMory:LOCK",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_lock",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "password",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "MMEMory:LOCK?",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_lock",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "MMEMory:MDIRectory",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_mdir",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "directory",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "MMEMory:MOVE",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_move",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "source",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "destination",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "MMEMory:RDIRectory",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_rdir",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "directory",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "MMEMory:STORe:LIST<n>",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_stor_list",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "filename",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "MMEMory:TIME?",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_time",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "filename",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "arbitrary-ascii"
             }
           },
           {
             "name": "MMEMory:UNLock",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_unl",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "password",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "MMEMory:UPLoad?",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_upl",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "filename",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "data-block"
             }
           },
           {
@@ -957,24 +1462,40 @@
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_info",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "arbitrary-ascii"
             }
           },
           {
             "name": "MMEMory:LOAD:PROFile",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_load_prof",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "filename",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "MMEMory:STORe:PROFile",
             "helpLink": "EEZ PSU SCPI reference 5.10 - MMEMory.html#mmem_stor_prof",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "filename",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           }
         ]
       },
@@ -985,81 +1506,175 @@
           {
             "name": "OUTPut[:STATe]",
             "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
+            "response": {}
           },
           {
             "name": "OUTPut[:STATe]?",
             "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "OUTPut[:STATe]:TRIGgered",
             "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_trig",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
+            "response": {}
           },
           {
             "name": "OUTPut[:STATe]:TRIGgered?",
             "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_trig",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "OUTPut:MODE?",
             "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_mode",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "arbitrary-ascii"
             }
           },
           {
             "name": "OUTPut:PROTection:CLEar",
             "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_prot_cle",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
+            "response": {}
           },
           {
             "name": "OUTPut:PROTection:COUPle",
             "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_prot_coup",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "OUTPut:PROTection:COUPle?",
             "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_prot_coup",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "OUTPut:TRACk[:STATe]",
             "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_trac",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "OUTPut:TRACk[:STATe]?",
             "helpLink": "EEZ PSU SCPI reference 5.11 - OUTPut.html#outp_trac",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           }
         ]
@@ -1071,87 +1686,202 @@
           {
             "name": "SENSe:CURRent[:DC]:RANGe:AUTO",
             "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_curr_rang_auto",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SENSe:CURRent[:DC]:RANGe:AUTO?",
             "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_curr_rang_auto",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "SENSe:CURRent[:DC]:RANGe[:UPPer]",
             "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_curr_rang",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "range",
+                "type": [
+                  {
+                    "type": "nr2"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "Range"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SENSe:CURRent[:DC]:RANGe[:UPPer]?",
             "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_curr_rang",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
             "name": "SENSe:DLOG:FUNCtion:CURRent",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SENSe:DLOG:FUNCtion:CURRent?",
             "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_dlog_func_curr",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "SENSe:DLOG:FUNCtion:VOLTage",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SENSe:DLOG:FUNCtion:VOLTage?",
             "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_dlog_func_volt",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "SENSe:DLOG:FUNCtion:POWer",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SENSe:DLOG:FUNCtion:POWer?",
             "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_dlog_func_pow",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "SENSe:DLOG:PERiod",
             "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_dlog_per",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "time",
+                "type": [
+                  {
+                    "type": "nr2"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SENSe:DLOG:PERiod?",
@@ -1164,10 +1894,18 @@
           {
             "name": "SENSe:DLOG:TIME",
             "helpLink": "EEZ PSU SCPI reference 5.12 - SENSe.html#sens_dlog_time",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "time",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SENSe:DLOG:TIME?",
@@ -1186,65 +1924,129 @@
           {
             "name": "[SOURce[<n>]]:CURRent:LIMit[:POSitive][:IMMediate][:AMPLitude]",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_lim",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "current",
+                "type": [
+                  {
+                    "type": "nr2"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "QueryCurrent"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:CURRent:LIMit[:POSitive][:IMMediate][:AMPLitude]?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_lim",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "query current",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "QueryCurrent"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
             "name": "[SOURce[<n>]]:CURRent:MODE",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_mode",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "mode",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Mode1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:CURRent:MODE?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_mode",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "discrete",
+              "enumeration": "Mode1"
             }
           },
           {
             "name": "[SOURce[<n>]]:CURRent:PROTection:DELay[:TIME]",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_prot_del",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "time",
+                "type": [
+                  {
+                    "type": "nr2"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "Mode"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:CURRent:PROTection:DELay[:TIME]?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_prot_del",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "query time",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Mode"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
             "name": "[SOURce[<n>]]:CURRent:PROTection:STATe",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_prot_stat",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:CURRent:PROTection:STATe?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_prot_stat",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
@@ -1252,143 +2054,272 @@
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_prot_trip",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "[SOURce[<n>]]:CURRent[:LEVel]:TRIGgered[:AMPLitude]",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_trig",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "current",
+                "type": [
+                  {
+                    "type": "nr2"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "QueryCurrent"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:CURRent[:LEVel]:TRIGgered[:AMPLitude]?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_trig",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "query current",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "QueryCurrent"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
             "name": "[SOURce[<n>]]:CURRent[:LEVel][:IMMediate]:STEP[:INCRement]",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_step",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "step",
+                "type": [
+                  {
+                    "type": "nr2"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "Mode"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:CURRent[:LEVel][:IMMediate]:STEP[:INCRement]?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr_step",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "query step",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Mode"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
             "name": "[SOURce[<n>]]:CURRent[:LEVel][:IMMediate][:AMPLitude]",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "current",
+                "type": [
+                  {
+                    "type": "nr2"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "Current"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:CURRent[:LEVel][:IMMediate][:AMPLitude]?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_curr",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "query current",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "QueryCurrent"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
             "name": "[SOURce[<n>]]:LIST:COUNt",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_list_count",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "count",
+                "type": [
+                  {
+                    "type": "nr1"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "Count"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:LIST:COUNt?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_list_count",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "arbitrary-ascii"
             }
           },
           {
             "name": "[SOURce[<n>]]:LIST:CURRent[:LEVel]",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_list_curr",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "current",
+                "type": [
+                  {
+                    "type": "nr2"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "Current"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:LIST:CURRent[:LEVel]?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_list_curr",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "arbitrary-ascii"
             }
           },
           {
             "name": "[SOURce[<n>]]:LIST:DWELl",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_list_dwel",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "time",
+                "type": [
+                  {
+                    "type": "nr2"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:LIST:DWELl?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_list_dwel",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "arbitrary-ascii"
             }
           },
           {
             "name": "[SOURce[<n>]]:LIST:VOLTage[:LEVel]",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_list_volt",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "voltage",
+                "type": [
+                  {
+                    "type": "nr2"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "Current"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:LIST:VOLTage[:LEVel]?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_list_volt",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "arbitrary-ascii"
             }
           },
           {
             "name": "[SOURce[<n>]]:LRIPple",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_lrip",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:LRIPple:AUTO",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_lrip_auto",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:LRIPple:AUTO?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_lrip_auto",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
@@ -1396,55 +2327,109 @@
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_lrip",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "[SOURce[<n>]]:POWer:LIMit",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_pow_lim",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "power",
+                "type": [
+                  {
+                    "type": "nr2"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "QueryCurrent"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:POWer:LIMit?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_pow_lim",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "query power",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Delay"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
             "name": "[SOURce[<n>]]:POWer:PROTection:DELay[:TIME]",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_pow_prot_del",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "time",
+                "type": [
+                  {
+                    "type": "nr2"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "Mode"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:POWer:PROTection:DELay[:TIME]?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_pow_prot_del",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "query time",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Mode"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
             "name": "[SOURce[<n>]]:POWer:PROTection:STATe",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_pow_prot_stat",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:POWer:PROTection:STATe?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_pow_prot_stat",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
@@ -1452,103 +2437,188 @@
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_pow_prot_trip",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "[SOURce[<n>]]:POWer:PROTection[:LEVel]",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_pow_prot",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "power",
+                "type": [
+                  {
+                    "type": "nr2"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "QueryCurrent"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:POWer:PROTection[:LEVel]?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_pow_prot",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
             "name": "[SOURce[<n>]]:VOLTage:LIMit[:POSitive][:IMMediate][:AMPLitude]",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_lim",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "voltage",
+                "type": [
+                  {
+                    "type": "nr2"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "QueryCurrent"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:VOLTage:LIMit[:POSitive][:IMMediate][:AMPLitude]?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_lim",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "query voltage",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Delay"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
             "name": "[SOURce[<n>]]:VOLTage:MODE",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_mode",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "mode",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Mode1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:VOLTage:MODE?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_mode",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "discrete",
+              "enumeration": "Mode1"
             }
           },
           {
             "name": "[SOURce[<n>]]:VOLTage:PROGram[:SOURce]",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_prog",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "source",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Source1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:VOLTage:PROGram[:SOURce]?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_prog",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "[SOURce[<n>]]:VOLTage:PROTection:DELay[:TIME]",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_prot_del",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "time",
+                "type": [
+                  {
+                    "type": "nr2"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "Mode"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:VOLTage:PROTection:DELay[:TIME]?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_prot_del",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "query time",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Mode"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
             "name": "[SOURce[<n>]]:VOLTage:PROTection:STATe",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_prot_stat",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:VOLTage:PROTection:STATe?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_prot_stat",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
@@ -1556,87 +2626,177 @@
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_prot_trip",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "[SOURce[<n>]]:VOLTage:PROTection[:LEVel]",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_prot",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "voltage",
+                "type": [
+                  {
+                    "type": "nr2"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "QueryCurrent"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:VOLTage:PROTection[:LEVel]?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_prot",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
             "name": "[SOURce[<n>]]:VOLTage:SENSe[:SOURce]",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_sens",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "source",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Source1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:VOLTage:SENSe[:SOURce]?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_sens",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "[SOURce[<n>]]:VOLTage[:LEVel]:TRIGgered[:AMPLitude]",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_trig",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "voltage",
+                "type": [
+                  {
+                    "type": "nr2"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "QueryCurrent"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:VOLTage[:LEVel]:TRIGgered[:AMPLitude]?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_trig",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "query voltage",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Delay"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
             "name": "[SOURce[<n>]]:VOLTage[:LEVel][:IMMediate]:STEP[:INCRement]",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_step",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "step",
+                "type": [
+                  {
+                    "type": "nr2"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "Mode"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:VOLTage[:LEVel][:IMMediate]:STEP[:INCRement]?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt_step",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "query step",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Mode"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
             "name": "[SOURce[<n>]]:VOLTage[:LEVel][:IMMediate][:AMPLitude]",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "voltage",
+                "type": [
+                  {
+                    "type": "nr2"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "Current"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "[SOURce[<n>]]:VOLTage[:LEVel][:IMMediate][:AMPLitude]?",
             "helpLink": "EEZ PSU SCPI reference 5.13 - SOURce.html#sour_volt",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "query voltage",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "QueryCurrent"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           }
         ]
@@ -1656,10 +2816,18 @@
           {
             "name": "STATus:OPERation:ENABle",
             "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_oper_enab",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "value",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "STATus:OPERation:ENABle?",
@@ -1680,10 +2848,18 @@
           {
             "name": "STATus:OPERation:INSTrument:ENABle",
             "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_oper_inst_enab",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "value",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "STATus:OPERation:INSTrument:ENABle?",
@@ -1704,10 +2880,18 @@
           {
             "name": "STATus:OPERation:INSTrument:ISUMmary[<n>]:ENABle",
             "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_oper_inst_isum_enab",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "value",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "STATus:OPERation:INSTrument:ISUMmary[<n>]:ENABle?",
@@ -1745,9 +2929,7 @@
             "name": "STATus:PREset",
             "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_pre",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "STATus:QUEStionable:CONDition?",
@@ -1760,10 +2942,18 @@
           {
             "name": "STATus:QUEStionable:ENABle",
             "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_ques_enab",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "value",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "STATus:QUEStionable:ENABle?",
@@ -1784,10 +2974,18 @@
           {
             "name": "STATus:QUEStionable:INSTrument:ENABle",
             "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_ques_inst_enab",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "value",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "STATus:QUEStionable:INSTrument:ENABle?",
@@ -1808,10 +3006,18 @@
           {
             "name": "STATus:QUEStionable:INSTrument:ISUMmary[<n>]:ENABle",
             "helpLink": "EEZ PSU SCPI reference 5.14 - STATus.html#stat_ques_inst_isum_enab",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "value",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "STATus:QUEStionable:INSTrument:ISUMmary[<n>]:ENABle?",
@@ -1854,105 +3060,196 @@
           {
             "name": "SYSTem:BEEPer:KEY:STATe",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_beep_key_stat",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:BEEPer:KEY:STATe?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_beep_key_stat",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "SYSTem:BEEPer:STATe",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_beep_stat",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:BEEPer:STATe?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_beep_stat",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "SYSTem:BEEPer[:IMMediate]",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_beep",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "SYSTem:CAPability?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_cap",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "arbitrary-ascii"
             }
           },
           {
             "name": "SYSTem:CHANnel:INFOrmation:CURRent?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_curr",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
             "name": "SYSTem:CHANnel:INFOrmation:ONTime:LAST?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_ont_last",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "quoted-string"
             }
           },
           {
             "name": "SYSTem:CHANnel:INFOrmation:ONTime:TOTal?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_ont_tot",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "quoted-string"
             }
           },
           {
             "name": "SYSTem:CHANnel:INFOrmation:POWer?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_pow",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
             "name": "SYSTem:CHANnel:INFOrmation:PROGram?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_prog",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "list-of-quoted-string"
             }
           },
           {
             "name": "SYSTem:CHANnel:INFOrmation:VOLTage?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_volt",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
             "name": "SYSTem:CHANnel:MODel?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_chan_mod",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "quoted-string"
             }
           },
           {
@@ -1966,106 +3263,183 @@
           {
             "name": "SYSTem:COMMunicate:ENABle",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_enab",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "interface",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Interface"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:COMMunicate:ENABle?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_enab",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "interface",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Interface"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "SYSTem:COMMunicate:ETHernet:ADDRess",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_addr",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "ip_address",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:COMMunicate:ETHernet:ADDRess?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_addr",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "quoted-string"
             }
           },
           {
             "name": "SYSTem:COMMunicate:ETHernet:DHCP",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_dhcp",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:COMMunicate:ETHernet:DHCP?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_dhcp",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "SYSTem:COMMunicate:ETHernet:DNS",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_dns",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "ip_address",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:COMMunicate:ETHernet:DNS?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_dns",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "quoted-string"
             }
           },
           {
             "name": "SYSTem:COMMunicate:ETHernet:GATEway",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_gate",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "ip_address",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:COMMunicate:ETHernet:GATEway?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_gate",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "quoted-string"
             }
           },
           {
             "name": "SYSTem:COMMunicate:ETHernet:MAC",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_mac",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "mac_address",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:COMMunicate:ETHernet:MAC?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_mac",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "quoted-string"
             }
           },
           {
             "name": "SYSTem:COMMunicate:ETHernet:PORT",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_port",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "number",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:COMMunicate:ETHernet:PORT?",
@@ -2078,58 +3452,92 @@
           {
             "name": "SYSTem:COMMunicate:ETHernet:SMASk",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_smas",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "mask",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:COMMunicate:ETHernet:SMASk?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_eth_smas",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "quoted-string"
             }
           },
           {
             "name": "SYSTem:COMMunicate:NTP",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_ntp",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "server",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:COMMunicate:NTP?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_ntp",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "quoted-string"
             }
           },
           {
             "name": "SYSTem:COMMunicate:RLSTate",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_rlst",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "state",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "State"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:COMMunicate:RLSTate?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_rlst",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "quoted-string",
+              "enumeration": ""
             }
           },
           {
             "name": "SYSTem:COMMunicate:SERial:BAUD",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_ser_baud",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "speed",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:COMMunicate:SERial:BAUD?",
@@ -2142,17 +3550,27 @@
           {
             "name": "SYSTem:COMMunicate:SERial:PARity",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_ser_par",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "parity",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Parity"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:COMMunicate:SERial:PARity?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_comm_ser_par",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "discrete",
+              "enumeration": "Parity"
             }
           },
           {
@@ -2160,23 +3578,45 @@
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_cpu_eth_type",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "arbitrary-ascii"
             }
           },
           {
             "name": "SYSTem:CPU:INFOrmation:ONTime:LAST?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_cpu_ont_last",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "quoted-string"
             }
           },
           {
             "name": "SYSTem:CPU:INFOrmation:ONTime:TOTal?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_cpu_ont_tot",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "quoted-string"
             }
           },
           {
@@ -2184,7 +3624,7 @@
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_cpu_type",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "quoted-string"
             }
           },
           {
@@ -2192,7 +3632,7 @@
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_cpu_mod",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "quoted-string"
             }
           },
           {
@@ -2200,31 +3640,67 @@
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_cpu_opt",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "quoted-string"
             }
           },
           {
             "name": "SYSTem:DATE",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_date",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "year",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "month",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "day",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:DATE?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_date",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "arbitrary-ascii"
             }
           },
           {
             "name": "SYSTem:DIGital:INPut:DATA?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_inp_data",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "pin",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
@@ -2234,10 +3710,28 @@
               "R5B12",
               "Simulator"
             ],
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "pin",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "state",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "State1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:DIGital:OUTPut:DATA?",
@@ -2246,41 +3740,71 @@
               "R5B12",
               "Simulator"
             ],
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "pin",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "SYSTem:DIGital:PIN<n>:FUNCtion",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_pin_func",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "function",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Function"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:DIGital:PIN<n>:FUNCtion?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_pin_func",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "discrete",
+              "enumeration": "Function"
             }
           },
           {
             "name": "SYSTem:DIGital:PIN<n>:POLarity",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_pin_pol",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "polarity",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Polarity"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:DIGital:PIN<n>:POLarity?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_dig_pin_pol",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "discrete",
+              "enumeration": "Polarity"
             }
           },
           {
@@ -2296,7 +3820,7 @@
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#__RefHeading__23078_295952897",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "arbitrary-ascii"
             }
           },
           {
@@ -2304,87 +3828,120 @@
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_inh",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "SYSTem:KLOCk",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_kloc",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "SYSTem:LOCal",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_loc",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "SYSTem:PASSword:CALibration:RESet",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_pass_cal_res",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "SYSTem:PASSword:FPANel:RESet",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_pass_fpan_res",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "SYSTem:PASSword:NEW",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_pass_new",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "old",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "new",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:PON:OUTPut:DISable",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_pon_outp_dis",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:PON:OUTPut:DISable?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_pon_outp_dis",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "SYSTem:POWer",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_pow",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:POWer:PROTection:TRIP",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_pow_prot_trip",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:POWer:PROTection:TRIP?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_pow_prot_trip",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
@@ -2392,45 +3949,79 @@
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_pow",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "SYSTem:REMote",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_rem",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "SYSTem:RWLock",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_rwl",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "SYSTem:TEMPerature:PROTection[:HIGH]:CLEar",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_temp_prot_cle",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "sensor",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Sensor1"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:TEMPerature:PROTection[:HIGH]:DELay[:TIME]",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_temp_prot_del",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "delay",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "sensor",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Sensor1"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:TEMPerature:PROTection[:HIGH]:DELay[:TIME]?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_temp_prot_del",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "sensor",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Sensor1"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
               "type": "nr1"
             }
@@ -2438,81 +4029,194 @@
           {
             "name": "SYSTem:TEMPerature:PROTection[:HIGH]:STATe",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_temp_prot_stat",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "sensor",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Sensor1"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:TEMPerature:PROTection[:HIGH]:STATe?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_temp_prot_stat",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "sensor",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Sensor1"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "SYSTem:TEMPerature:PROTection[:HIGH]:TRIPped?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_temp_prot_trip",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "sensor",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Sensor1"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "SYSTem:TEMPerature:PROTection[:HIGH][:LEVel]",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_temp_prot",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "temperature",
+                "type": [
+                  {
+                    "type": "nr2"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "sensor",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Sensor1"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:TEMPerature:PROTection[:HIGH][:LEVel]?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_temp_prot",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "sensor",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Sensor1"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
             "name": "SYSTem:TIME",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_time",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "hours",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "minutes",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "seconds",
+                "type": [
+                  {
+                    "type": "nr1"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:TIME:DST",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_time_dst",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "rules",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Rules"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:TIME:DST?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_time_dst",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "discrete",
+              "enumeration": "Rules"
             }
           },
           {
             "name": "SYSTem:TIME:ZONE",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_time_zone",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "zone",
+                "type": [
+                  {
+                    "type": "quoted-string"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SYSTem:TIME:ZONE?",
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_time_zone",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "quoted-string"
             }
           },
           {
@@ -2520,7 +4224,7 @@
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_time",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "arbitrary-ascii"
             }
           },
           {
@@ -2528,7 +4232,7 @@
             "helpLink": "EEZ PSU SCPI reference 5.15 - SYSTem.html#syst_vers",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "arbitrary-ascii"
             }
           }
         ]
@@ -2540,10 +4244,22 @@
           {
             "name": "TRIGger[:SEQuence]:DELay",
             "helpLink": "EEZ PSU SCPI reference 5.16 - TRIGger.html#trig_del",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "delay",
+                "type": [
+                  {
+                    "type": "nr1"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "Delay"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "TRIGger[:SEQuence]:DELay?",
@@ -2556,62 +4272,88 @@
           {
             "name": "TRIGger[:SEQuence]:EXIT:CONDition",
             "helpLink": "EEZ PSU SCPI reference 5.16 - TRIGger.html#trig_exit_cond",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "condition",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Condition"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "TRIGger[:SEQuence]:EXIT:CONDition?",
             "helpLink": "EEZ PSU SCPI reference 5.16 - TRIGger.html#trig_exit_cond",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "discrete",
+              "enumeration": "Condition"
             }
           },
           {
             "name": "TRIGger[:SEQuence]:SOURce",
             "helpLink": "EEZ PSU SCPI reference 5.16 - TRIGger.html#trig_sour",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "source",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Source"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "TRIGger[:SEQuence]:SOURce?",
             "helpLink": "EEZ PSU SCPI reference 5.16 - TRIGger.html#trig_sour",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "discrete",
+              "enumeration": "Source"
             }
           },
           {
             "name": "TRIGger[:SEQuence][:IMMediate]",
             "helpLink": "EEZ PSU SCPI reference 5.16 - TRIGger.html#trig_imm",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "TRIGger:DLOG[:IMMediate]",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "TRIGger:DLOG:SOURce",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "source",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Source"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "TRIGger:DLOG:SOURce?",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "discrete",
+              "enumeration": "Source"
             }
           }
         ]
@@ -2623,17 +4365,73 @@
           {
             "name": "APPLy",
             "helpLink": "EEZ PSU SCPI reference 6 - Device-specific commands.html#__RefNumPara__11998_1238896024",
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "voltage",
+                "type": [
+                  {
+                    "type": "nr2"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "Current"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "current",
+                "type": [
+                  {
+                    "type": "nr2"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "Current"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
+            "response": {}
           },
           {
             "name": "APPLy?",
             "helpLink": "EEZ PSU SCPI reference 6 - Device-specific commands.html#__RefNumPara__11998_1238896024",
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "channel",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Channel"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "query param",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "QueryParam"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "arbitrary-ascii"
             }
           },
           {
@@ -2641,7 +4439,7 @@
             "helpLink": "EEZ PSU SCPI reference 6 - Device-specific commands.html#debug",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "arbitrary-ascii"
             }
           }
         ]
@@ -2667,9 +4465,7 @@
               "Simulator"
             ],
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "SIMUlator:GUI",
@@ -2678,9 +4474,7 @@
               "Simulator"
             ],
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "SIMUlator:LOAD",
@@ -2688,10 +4482,22 @@
             "usedIn": [
               "Simulator"
             ],
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "resistance",
+                "type": [
+                  {
+                    "type": "nr2"
+                  },
+                  {
+                    "type": "discrete",
+                    "enumeration": "Resistance"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SIMUlator:LOAD:STATe",
@@ -2699,10 +4505,18 @@
             "usedIn": [
               "Simulator"
             ],
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SIMUlator:LOAD:STATe?",
@@ -2712,7 +4526,7 @@
             ],
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
@@ -2723,7 +4537,7 @@
             ],
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
@@ -2732,10 +4546,18 @@
             "usedIn": [
               "Simulator"
             ],
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SIMUlator:PIN1?",
@@ -2745,7 +4567,7 @@
             ],
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
@@ -2754,10 +4576,18 @@
             "usedIn": [
               "Simulator"
             ],
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SIMUlator:PWRGood?",
@@ -2767,7 +4597,7 @@
             ],
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
@@ -2777,9 +4607,7 @@
               "Simulator"
             ],
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "SIMUlator:RPOL",
@@ -2787,10 +4615,18 @@
             "usedIn": [
               "Simulator"
             ],
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "bool",
+                "type": [
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SIMUlator:RPOL?",
@@ -2800,7 +4636,7 @@
             ],
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
@@ -2809,10 +4645,28 @@
             "usedIn": [
               "Simulator"
             ],
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "temperature",
+                "type": [
+                  {
+                    "type": "nr2"
+                  }
+                ],
+                "isOptional": false
+              },
+              {
+                "name": "sensor",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Sensor1"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SIMUlator:TEMPerature?",
@@ -2820,9 +4674,20 @@
             "usedIn": [
               "Simulator"
             ],
-            "parameters": [],
+            "parameters": [
+              {
+                "name": "sensor",
+                "type": [
+                  {
+                    "type": "discrete",
+                    "enumeration": "Sensor1"
+                  }
+                ],
+                "isOptional": true
+              }
+            ],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           },
           {
@@ -2831,10 +4696,18 @@
             "usedIn": [
               "Simulator"
             ],
-            "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "parameters": [
+              {
+                "name": "voltage",
+                "type": [
+                  {
+                    "type": "nr2"
+                  }
+                ],
+                "isOptional": false
+              }
+            ],
+            "response": {}
           },
           {
             "name": "SIMUlator:VOLTage:PROGram:EXTernal?",
@@ -2844,7 +4717,7 @@
             ],
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "nr2"
             }
           }
         ]
@@ -2860,85 +4733,69 @@
           {
             "name": "DEBUg",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "DEBUg:WDOG",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "DEBUg:WDOG?",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           },
           {
             "name": "DEBUg:ONTime?",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "arbitrary-ascii"
             }
           },
           {
             "name": "DEBUg:VOLTage",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "DEBUg:CURRent",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "DEBUg:MEASure:VOLTage",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "DEBUg:MEASure:CURRent",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "DEBUg:FAN",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "DEBUg:FAN?",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "arbitrary-ascii"
             }
           },
           {
             "name": "DEBUg:FAN:PID",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "DEBUg:FAN:PID?",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "arbitrary-ascii"
             }
           }
         ]
@@ -2949,29 +4806,23 @@
           {
             "name": "SYSTem:DATE:CLEar",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "SYSTem:TIME:CLEar",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "SYSTem:SERial",
             "parameters": [],
-            "response": {
-              "type": "nr1"
-            }
+            "response": {}
           },
           {
             "name": "SYSTem:SERial?",
             "parameters": [],
             "response": {
-              "type": "nr1"
+              "type": "boolean"
             }
           }
         ]
@@ -2982,7 +4833,471 @@
         "commands": []
       }
     ],
-    "enums": []
+    "enums": [
+      {
+        "name": "Channel",
+        "members": [
+          {
+            "name": "CH1",
+            "value": "1"
+          },
+          {
+            "name": "CH2",
+            "value": "2"
+          }
+        ]
+      },
+      {
+        "name": "Range",
+        "members": [
+          {
+            "name": "MIN",
+            "value": "1"
+          },
+          {
+            "name": "MAX",
+            "value": "2"
+          },
+          {
+            "name": "DEFault",
+            "value": "3"
+          }
+        ]
+      },
+      {
+        "name": "Delay",
+        "members": [
+          {
+            "name": "MIN",
+            "value": "1"
+          },
+          {
+            "name": "MAX",
+            "value": "2"
+          }
+        ]
+      },
+      {
+        "name": "Condition",
+        "members": [
+          {
+            "name": "OFF",
+            "value": "1"
+          },
+          {
+            "name": "FIRSt",
+            "value": "2"
+          },
+          {
+            "name": "LAST",
+            "value": "3"
+          },
+          {
+            "name": "STANdby",
+            "value": "4"
+          }
+        ]
+      },
+      {
+        "name": "Source",
+        "members": [
+          {
+            "name": "BUS",
+            "value": "1"
+          },
+          {
+            "name": "IMM",
+            "value": "2"
+          },
+          {
+            "name": "MAN",
+            "value": "3"
+          },
+          {
+            "name": "PIN1",
+            "value": "4"
+          }
+        ]
+      },
+      {
+        "name": "Mode",
+        "members": [
+          {
+            "name": "DEFault",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "name": "Level",
+        "members": [
+          {
+            "name": "MIN",
+            "value": "1"
+          },
+          {
+            "name": "MID",
+            "value": "2"
+          },
+          {
+            "name": "MAX",
+            "value": "3"
+          }
+        ]
+      },
+      {
+        "name": "Range1",
+        "members": [
+          {
+            "name": "HIGH",
+            "value": "1"
+          },
+          {
+            "name": "LOW",
+            "value": "2"
+          }
+        ]
+      },
+      {
+        "name": "Current",
+        "members": [
+          {
+            "name": "MIN",
+            "value": "1"
+          },
+          {
+            "name": "DEF",
+            "value": "2"
+          },
+          {
+            "name": "MAX",
+            "value": "3"
+          },
+          {
+            "name": "UP",
+            "value": "4"
+          },
+          {
+            "name": "DOWN",
+            "value": "5"
+          }
+        ]
+      },
+      {
+        "name": "QueryCurrent",
+        "members": [
+          {
+            "name": "MIN",
+            "value": "1"
+          },
+          {
+            "name": "DEF",
+            "value": "2"
+          },
+          {
+            "name": "MAX",
+            "value": "3"
+          }
+        ]
+      },
+      {
+        "name": "Mode1",
+        "members": [
+          {
+            "name": "FIXed",
+            "value": "1"
+          },
+          {
+            "name": "LIST",
+            "value": "2"
+          },
+          {
+            "name": "STEP",
+            "value": "3"
+          }
+        ]
+      },
+      {
+        "name": "Count",
+        "members": [
+          {
+            "name": "INFinity",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "name": "Source1",
+        "members": [
+          {
+            "name": "INTernal",
+            "value": "1"
+          },
+          {
+            "name": "EXTernal",
+            "value": "2"
+          }
+        ]
+      },
+      {
+        "name": "Sensor",
+        "members": [
+          {
+            "name": "AUX",
+            "value": "1"
+          },
+          {
+            "name": "CH1",
+            "value": "2"
+          },
+          {
+            "name": "CH2",
+            "value": "3"
+          },
+          {
+            "name": "BATT",
+            "value": "4"
+          }
+        ]
+      },
+      {
+        "name": "Type",
+        "members": [
+          {
+            "name": "NONE",
+            "value": "1"
+          },
+          {
+            "name": "PARallel",
+            "value": "2"
+          },
+          {
+            "name": "SERies",
+            "value": "3"
+          }
+        ]
+      },
+      {
+        "name": "Value",
+        "members": [
+          {
+            "name": "VOLTage",
+            "value": "1"
+          },
+          {
+            "name": "CURRent",
+            "value": "2"
+          },
+          {
+            "name": "POWer",
+            "value": "3"
+          }
+        ]
+      },
+      {
+        "name": "Mode2",
+        "members": [
+          {
+            "name": "ALL",
+            "value": "1"
+          },
+          {
+            "name": "CH1",
+            "value": "2"
+          },
+          {
+            "name": "CH2",
+            "value": "3"
+          },
+          {
+            "name": "NONE",
+            "value": "4"
+          }
+        ]
+      },
+      {
+        "name": "QueryParam",
+        "members": [
+          {
+            "name": "CURR",
+            "value": "1"
+          },
+          {
+            "name": "VOLT",
+            "value": "2"
+          }
+        ]
+      },
+      {
+        "name": "Resistance",
+        "members": [
+          {
+            "name": "INFinite",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "name": "Sensor1",
+        "members": [
+          {
+            "name": "AUX",
+            "value": "1"
+          },
+          {
+            "name": "CH1",
+            "value": "2"
+          },
+          {
+            "name": "CH2",
+            "value": "3"
+          }
+        ]
+      },
+      {
+        "name": "Interface",
+        "members": [
+          {
+            "name": "SERial",
+            "value": "1"
+          },
+          {
+            "name": "ETHernet",
+            "value": "2"
+          },
+          {
+            "name": "NTP",
+            "value": "3"
+          },
+          {
+            "name": "SOCKets",
+            "value": "4"
+          }
+        ]
+      },
+      {
+        "name": "State",
+        "members": [
+          {
+            "name": "LOCal",
+            "value": "1"
+          },
+          {
+            "name": "REMote",
+            "value": "2"
+          },
+          {
+            "name": "RWLock",
+            "value": "3"
+          }
+        ]
+      },
+      {
+        "name": "Parity",
+        "members": [
+          {
+            "name": "EVEN",
+            "value": "1"
+          },
+          {
+            "name": "MARK",
+            "value": "2"
+          },
+          {
+            "name": "NONE",
+            "value": "3"
+          },
+          {
+            "name": "ODD",
+            "value": "4"
+          },
+          {
+            "name": "SPACE",
+            "value": "5"
+          }
+        ]
+      },
+      {
+        "name": "State1",
+        "members": [
+          {
+            "name": "ON",
+            "value": "1"
+          },
+          {
+            "name": "OFF",
+            "value": "2"
+          }
+        ]
+      },
+      {
+        "name": "Function",
+        "members": [
+          {
+            "name": "DINP",
+            "value": "1"
+          },
+          {
+            "name": "DOUT",
+            "value": "2"
+          },
+          {
+            "name": "FAUL",
+            "value": "3"
+          },
+          {
+            "name": "INH",
+            "value": "4"
+          },
+          {
+            "name": "ONC",
+            "value": "5"
+          },
+          {
+            "name": "TINP",
+            "value": "6"
+          },
+          {
+            "name": "TOUT",
+            "value": "7"
+          }
+        ]
+      },
+      {
+        "name": "Polarity",
+        "members": [
+          {
+            "name": "POSitive",
+            "value": "1"
+          },
+          {
+            "name": "NEGative",
+            "value": "2"
+          }
+        ]
+      },
+      {
+        "name": "Rules",
+        "members": [
+          {
+            "name": "OFF",
+            "value": "1"
+          },
+          {
+            "name": "EU",
+            "value": "2"
+          },
+          {
+            "name": "USA",
+            "value": "3"
+          },
+          {
+            "name": "AUS",
+            "value": "4"
+          }
+        ]
+      }
+    ]
   },
   "shortcuts": {
     "shortcuts": [
