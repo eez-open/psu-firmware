@@ -205,11 +205,13 @@ void setDigitalOutputPinState(int pin, bool state) {
 		state = !state;
 	}
 
+#if EEZ_PSU_SELECTED_REVISION == EEZ_PSU_REVISION_R5B12
 	if (pin == 2) {
 		digitalWrite(DOUT, state);
 	} else {
 		digitalWrite(DOUT2, state);
 	}
+#endif
 }
 
 bool getDigitalOutputPinState(int pin) {

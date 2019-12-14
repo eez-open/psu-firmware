@@ -936,7 +936,7 @@ Value get(const Cursor &cursor, uint8_t id) {
 
             if (id == DATA_ID_TRIGGER_IS_INITIATED) {
 				bool isInitiated = trigger::isInitiated();
-#ifdef OPTION_SD_CARD
+#if OPTION_SD_CARD
 				if (!isInitiated && dlog::isInitiated()) {
 					isInitiated = true;
 				}
@@ -946,7 +946,7 @@ Value get(const Cursor &cursor, uint8_t id) {
         
             if (id == DATA_ID_TRIGGER_IS_MANUAL) {
 				bool isManual = trigger::getSource() == trigger::SOURCE_MANUAL;
-#ifdef OPTION_SD_CARD
+#if OPTION_SD_CARD
 				if (!isManual && dlog::g_triggerSource == trigger::SOURCE_MANUAL) {
 					isManual = true;
 				}
@@ -1238,7 +1238,7 @@ Value get(const Cursor &cursor, uint8_t id) {
 			return data::Value(2);
 		}
 #else
-		if (list::anyCounterVisible()) {
+		if (list::anyCounterVisible(CONF_LIST_COUNDOWN_DISPLAY_THRESHOLD)) {
 			return data::Value(1);
 		}
 #endif
