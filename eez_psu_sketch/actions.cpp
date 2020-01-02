@@ -162,7 +162,7 @@ void action_show_main_page() {
 }
 
 void action_show_event_queue() {
-        setPage(PAGE_ID_EVENT_QUEUE);
+    setPage(PAGE_ID_EVENT_QUEUE);
 }
 
 void action_show_channel_settings() {
